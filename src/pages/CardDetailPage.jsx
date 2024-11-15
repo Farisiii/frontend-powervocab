@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Button } from '@/components/UI/button'
+import { Button } from '@shadcn/ui/button'
 import {
   Table,
   TableBody,
@@ -8,8 +8,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { Card } from '@/components/ui/card'
+} from '@shadcn/ui/table'
+import { Card } from '@shadcn/ui/card'
 import { ArrowLeft, PlayCircle, Library } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 
