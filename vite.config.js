@@ -12,7 +12,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://backend-powervocab.vercel.app/',
+        target: 'https://backend-powervocab.vercel.app',
         changeOrigin: true,
         secure: false,
       },
