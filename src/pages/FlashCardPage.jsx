@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { Button } from '../components/ui/button'
+import { Card } from '../components/ui/card'
 import { ArrowLeft, Check, X } from 'lucide-react'
-import { useToast } from '@/hooks/use-toast'
+import { useToast } from '../hooks/use-toast'
 
 const FlashCardPage = () => {
   const { cardId } = useParams()

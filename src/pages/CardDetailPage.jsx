@@ -8,10 +8,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { Card } from '@/components/ui/card'
+} from '../components/ui/table'
+import { Card } from '../components/ui/card'
 import { ArrowLeft, PlayCircle, Library } from 'lucide-react'
-import { useToast } from '@/hooks/use-toast'
+import { useToast } from '../hooks/use-toast'
 
 const CardDetailPage = () => {
   const { cardId } = useParams()

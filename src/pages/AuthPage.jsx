@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import SuccessAlert from '@/components/SuccessAlert'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import SuccessAlert from '../components/SuccessAlert'
+import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert'
 import { X } from 'lucide-react'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'

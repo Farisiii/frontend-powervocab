@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { useToast } from '@/hooks/use-toast'
+import { Card, CardContent } from '../components/ui/card'
+import { Button } from '../components/ui/button'
+import { useToast } from '../hooks/use-toast'
 import {
   Loader2,
   Trophy,
@@ -11,7 +11,7 @@ import {
   ArrowLeftRight,
   ArrowLeft,
 } from 'lucide-react'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert'
 
 const TranslationGame = () => {
   const { cardId } = useParams()

@@ -1,9 +1,9 @@
 import React from 'react'
 import { ArrowRight, X } from 'lucide-react'
-import { DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
+import { DialogHeader, DialogTitle } from '../components/ui/dialog'
+import { Button } from '../components/ui/button'
+import { Label } from '../components/ui/label'
+import { Input } from '../components/ui/input'
 
 const FirstDialog = ({
   newCardData,
