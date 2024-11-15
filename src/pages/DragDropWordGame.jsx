@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Card, CardContent } from '../components/ui/card'
-import { Input } from '../components/ui/input'
-import { Button } from '../components/ui/button'
-import { Alert, AlertDescription } from '../components/ui/alert'
+import { Card, CardContent } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { ArrowLeft } from 'lucide-react'
 
 const DragDropWordGame = () => {

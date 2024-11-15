@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
-import { Button } from '../components/ui/button'
-import { useToast } from '../hooks/use-toast'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { useToast } from '@/hooks/use-toast'
 import {
   Loader2,
   Trophy,
@@ -12,7 +12,7 @@ import {
   Info,
   ArrowLeft,
 } from 'lucide-react'
-import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 const BubbleBathGame = () => {
   const { cardId } = useParams()

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import LearningCard from '../components/LearningCard'
 import AddCardDialog from '../components/AddCardDialog'
-import { Button } from '../components/ui/button'
+import { Button } from '@/components/ui/button'
 import { Plus, LogOut } from 'lucide-react'
 import {
   AlertDialog,
@@ -12,9 +12,9 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '../components/ui/alert-dialog'
+} from '@/components/ui/alert-dialog'
 import { fetchCards, createCard, updateCard, deleteCard } from '../api/cards'
-import { useToast } from '../hooks/use-toast'
+import { useToast } from '@/hooks/use-toast'
 import { useNavigate } from 'react-router-dom'
 
 const LearningCardsPage = () => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Button } from '../components/ui/button'
+import { Button } from '@/components/UI/button'
 import {
   Table,
   TableBody,
@@ -8,10 +8,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../components/ui/table'
-import { Card } from '../components/ui/card'
+} from '@/components/ui/table'
+import { Card } from '@/components/ui/card'
 import { ArrowLeft, PlayCircle, Library } from 'lucide-react'
-import { useToast } from '../hooks/use-toast'
+import { useToast } from '@/hooks/use-toast'
 
 const CardDetailPage = () => {
   const { cardId } = useParams()
