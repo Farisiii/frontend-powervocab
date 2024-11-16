@@ -5,7 +5,48 @@
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    <title>PowerVocab</title>
+    <style>
+      /* Reset default margins dan set tinggi minimum */
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        height: 100%;
+      }
+
+      /* Background container yang fixed */
+      .background-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        z-index: -1;
+      }
+
+      /* Wrapper untuk konten yang bisa di-scroll */
+      .content-wrapper {
+        position: relative;
+        min-height: 100vh;
+        z-index: 1;
+      }
+
+      /* Animasi float yang sama */
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
