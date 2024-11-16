@@ -5,6 +5,9 @@ dist-ssr
 
 # Environment files
 *.local
+.env
+.env.*
+!.env.example
 
 # Logs
 logs
@@ -18,6 +21,7 @@ lerna-debug.log*
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 .idea
 .DS_Store
 *.suo
@@ -25,3 +29,45 @@ lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Testing
+coverage
+.nyc_output
+*.lcov
+
+# Build output
+build
+out
+.next
+.nuxt
+.output
+
+# Cache directories
+.cache
+.temp
+.tmp
+.eslintcache
+.stylelintcache
+.parcel-cache
+
+# System files
+Thumbs.db
+desktop.ini
+
+# Package manager files
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+.pnpm-store/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Misc
+*.bak
+*.swp
+*.zip
+*.tar.gz
