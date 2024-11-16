@@ -736,12 +736,24 @@ const LearningCardsPage = () => {
             <p className="text-primary-300 mb-4">
               Belum ada kartu pembelajaran
             </p>
-            <Button
-              onClick={() => setIsFirstDialogOpen(true)}
-              className="bg-primary-400 hover:bg-primary-500"
+            <AddCardDialog
+              isFirstDialogOpen={isFirstDialogOpen}
+              isSecondDialogOpen={isSecondDialogOpen}
+              setIsFirstDialogOpen={setIsFirstDialogOpen}
+              setIsSecondDialogOpen={setIsSecondDialogOpen}
+              newCardData={newCardData}
+              setNewCardData={setNewCardData}
+              addWordPair={addWordPair}
+              removeWordPair={removeWordPair}
+              handleFirstDialogSubmit={handleFirstDialogSubmit}
+              handleSecondDialogSubmit={handleSecondDialogSubmit}
+              handleEnterKeyPress={handleEnterKeyPress}
+              isEditing={isEditing}
             >
-              Buat Kartu Pertama
-            </Button>
+              <Button className="bg-primary-400 hover:bg-primary-500">
+                Buat Kartu Pertama
+              </Button>
+            </AddCardDialog>
           </div>
         ) : (
           <div className="grid grid-cols-1 py-8 md:py-0 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
