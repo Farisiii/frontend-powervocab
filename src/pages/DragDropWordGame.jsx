@@ -174,49 +174,64 @@ const DragDropWordGame = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-accent-100 to-accent-50 p-4">
-      <div className="container mx-auto max-w-6xl lg:max-w-7xl">
-        <Card className="bg-white shadow-lg">
+    <div className="min-h-screen bg-gradient-to-b from-accent-100 to-accent-50 p-2 sm:p-4">
+      <div className="w-full md:w-[90%] lg:w-[80%] xl:w-[70%] mx-auto md:p-4">
+        <div className="w-fit flex justify-start items-start text-start">
+          <Button
+            onClick={handleBack}
+            variant="ghost"
+            className="text-primary-400 hover:text-primary-500 hover:bg-accent-200 transition-colors duration-200 text-base  mt-1 z-10 md:hidden flex-1 "
+          >
+            <ArrowLeft className="w-6 h-6" />
+            Back
+          </Button>
+        </div>
+
+        <Card className="shadow-lg py-6 md:p-0 md:mt-8">
           <CardHeader className="p-4">
             <div className="relative flex items-center justify-between">
               <Button
                 onClick={handleBack}
                 variant="ghost"
-                className="text-primary-400 hover:text-primary-500 hover:bg-accent-200 transition-colors duration-200 text-base md:text-lg lg:text-xl flex-shrink-0 mt-1 z-10"
+                className="text-primary-400 hover:text-primary-500 hover:bg-accent-200 transition-colors duration-200 text-base md:text-lg lg:text-xl flex-shrink-0 mt-1 z-10 hidden md:inline"
               >
-                <ArrowLeft className="w-6 h-6" />
+                <ArrowLeft className="w-6 h-6 hidden md:inline" />
                 Back
               </Button>
-              <CardTitle className="absolute left-0 right-0 text-3xl z-0 font-bold text-primary-400">
+              <CardTitle className="absolute left-0 right-0 text-2xl md:text-3xl z-0 font-bold text-primary-400">
                 Drag Drop Word Game
               </CardTitle>
-              <div className="w-6" />
             </div>
           </CardHeader>
-          <CardContent className="p-8">
+
+          <CardContent className="p-3 sm:p-4 md:p-6">
             {!gameStarted ? (
-              <div className="space-y-6">
-                <h2 className="text-xl lg:text-2xl mb-6">Complete the Text</h2>
-                <div className="space-y-4">
+              <div className="space-y-4 sm:space-y-6">
+                <h2 className="text-lg sm:text-xl md:text-2xl">
+                  Complete the Text
+                </h2>
+                <div className="space-y-3 sm:space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                       Enter your text (minimum 10 words):
                     </label>
                     <textarea
                       placeholder="Type or paste your text here..."
                       value={inputText}
                       onChange={(e) => setInputText(e.target.value)}
-                      className="w-full min-h-[120px] md:min-h-[160px] p-3 border rounded text-lg resize-y focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-accent-500"
+                      className="w-full min-h-[100px] sm:min-h-[120px] md:min-h-[160px] p-2 sm:p-3 border rounded text-sm sm:text-base resize-y focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-accent-500"
                     />
                   </div>
                   {error && (
                     <Alert variant="destructive">
-                      <AlertDescription>{error}</AlertDescription>
+                      <AlertDescription className="text-sm">
+                        {error}
+                      </AlertDescription>
                     </Alert>
                   )}
                   <Button
                     onClick={() => createPuzzle(inputText)}
-                    className="w-full bg-accent-600 hover:bg-accent-700 text-white py-6 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-accent-600 hover:bg-accent-700 text-white py-4 sm:py-6 text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={getWordCount(inputText) < 10}
                   >
                     Start Game
@@ -224,19 +239,19 @@ const DragDropWordGame = () => {
                 </div>
               </div>
             ) : (
-              <div className="space-y-8">
-                <div className="flex justify-between items-center">
-                  <h2 className="text-3xl font-bold text-primary-400">
+              <div className="space-y-4 sm:space-y-6 md:space-y-8">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-primary-400">
                     Fill in the missing words
                   </h2>
-                  <span className="text-xl font-semibold text-accent-600">
+                  <span className="text-lg sm:text-xl font-semibold text-accent-600">
                     Score: {score}/
                     {puzzleStructure.filter((item) => item.isHidden).length}
                   </span>
                 </div>
 
-                <div className="bg-secondary-50 p-6 rounded-lg leading-relaxed">
-                  <div className="prose prose-lg max-w-none">
+                <div className="bg-secondary-50 p-3 sm:p-4 md:p-6 rounded-lg">
+                  <div className="prose prose-sm sm:prose-base md:prose-lg max-w-none">
                     {puzzleStructure.map((item, idx) => (
                       <React.Fragment key={item.id}>
                         {idx > 0 && ' '}
@@ -245,8 +260,10 @@ const DragDropWordGame = () => {
                             onDragOver={handleDragOver}
                             onDrop={(e) => handleDrop(e, item.id)}
                             className={`
-                              inline-flex min-w-[120px] min-h-[40px] items-center
-                              border-2 border-dashed rounded px-3 py-2 align-middle
+                              inline-flex min-w-[80px] sm:min-w-[100px] md:min-w-[120px] 
+                              min-h-[32px] sm:min-h-[36px] md:min-h-[40px] 
+                              items-center border-2 border-dashed rounded 
+                              px-2 sm:px-3 py-1 sm:py-2 align-middle text-sm sm:text-base
                               ${
                                 item.currentWord
                                   ? 'border-success-400 bg-success-50'
@@ -258,25 +275,28 @@ const DragDropWordGame = () => {
                             {item.currentWord || ''}
                           </span>
                         ) : (
-                          <span className="text-lg">{item.originalWord}</span>
+                          <span className="text-sm sm:text-base md:text-lg">
+                            {item.originalWord}
+                          </span>
                         )}
                       </React.Fragment>
                     ))}
                   </div>
                 </div>
 
-                <div className="mt-6">
-                  <h3 className="text-xl font-semibold text-primary-400 mb-4">
+                <div>
+                  <h3 className="text-lg sm:text-xl font-semibold text-primary-400 mb-2 sm:mb-4">
                     Available Words:
                   </h3>
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-2 sm:gap-3">
                     {availableWords.map((word) => (
                       <div
                         key={word.id}
                         draggable
                         onDragStart={(e) => handleDragStart(e, word)}
-                        className="bg-accent-100 text-accent-800 px-4 py-2 rounded-lg cursor-move
-                          hover:bg-accent-200 transition-colors text-lg"
+                        className="bg-accent-100 text-accent-800 px-3 sm:px-4 py-1 sm:py-2 
+                          rounded-lg cursor-move hover:bg-accent-200 transition-colors 
+                          text-sm sm:text-base md:text-lg"
                       >
                         {word.word}
                       </div>
@@ -284,10 +304,11 @@ const DragDropWordGame = () => {
                   </div>
                 </div>
 
-                <div className="flex gap-6">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
                   <Button
                     onClick={checkAnswers}
-                    className="bg-success-600 hover:bg-success-700 text-white px-8 py-6 text-lg"
+                    className="bg-success-600 hover:bg-success-700 text-white px-6 sm:px-8 
+                      py-4 sm:py-6 text-sm sm:text-base w-full sm:w-auto"
                   >
                     Check Answers
                   </Button>
@@ -300,7 +321,8 @@ const DragDropWordGame = () => {
                       setAvailableWords([])
                       setPuzzleStructure([])
                     }}
-                    className="bg-error-600 hover:bg-error-700 text-white px-8 py-6 text-lg"
+                    className="bg-error-600 hover:bg-error-700 text-white px-6 sm:px-8 
+                      py-4 sm:py-6 text-sm sm:text-base w-full sm:w-auto"
                   >
                     New Game
                   </Button>

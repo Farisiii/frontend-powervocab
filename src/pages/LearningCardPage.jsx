@@ -131,7 +131,7 @@ const LearningCard = ({ card, onDelete, onEdit }) => {
       </div>
 
       <CardHeader>
-        <CardTitle className="text-xl text-primary-400 pr-16">
+        <CardTitle className="text-xl text-primary-400 md:text-center text-left">
           {card.title}
         </CardTitle>
       </CardHeader>

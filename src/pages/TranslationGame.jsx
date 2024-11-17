@@ -178,20 +178,30 @@ const TranslationGame = () => {
   }
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-accent-100 to-accent-50">
+    <div className="min-h-screen w-full bg-gradient-to-b from-accent-100 to-accent-50 p-4">
       <div className="w-full md:w-[90%] lg:w-[80%] xl:w-[70%] mx-auto p-2 md:p-4">
-        <Card className="shadow-lg">
+        <div className="w-fit flex justify-start items-start text-start">
+          <Button
+            onClick={handleBack}
+            variant="ghost"
+            className="text-primary-400 hover:text-primary-500 hover:bg-accent-200 transition-colors duration-200 text-base  mt-1 z-10 md:hidden flex-1 "
+          >
+            <ArrowLeft className="w-6 h-6" />
+            Back
+          </Button>
+        </div>
+        <Card className="shadow-lg py-6 md:p-0 md:mt-8">
           <CardHeader className="p-4">
             <div className="relative flex items-center justify-between">
               <Button
                 onClick={handleBack}
                 variant="ghost"
-                className="text-primary-400 hover:text-primary-500 hover:bg-accent-200 transition-colors duration-200 text-base md:text-lg lg:text-xl flex-shrink-0 mt-1 z-10"
+                className="text-primary-400 hover:text-primary-500 hover:bg-accent-200 transition-colors duration-200 text-base md:text-lg lg:text-xl flex-shrink-0 mt-1 z-10 hidden md:inline"
               >
-                <ArrowLeft className="w-6 h-6" />
+                <ArrowLeft className="w-6 h-6 hidden md:inline" />
                 Back
               </Button>
-              <CardTitle className="absolute left-0 right-0 text-3xl z-0 font-bold text-primary-400">
+              <CardTitle className="absolute left-0 right-0 text-2xl md:text-3xl z-0 font-bold text-primary-400">
                 Translation Game
               </CardTitle>
               <div className="w-6" />
@@ -246,7 +256,7 @@ const TranslationGame = () => {
                       key={index}
                       onClick={() => handleOptionSelect(option, index)}
                       disabled={selectedOption !== null}
-                      className={`min-h-[100px] md:min-h-[120px] text-xl md:text-2xl lg:text-3xl p-4 md:p-6 rounded-xl transition-all transform hover:scale-102 ${
+                      className={`min-h-[72px] md:min-h-[120px] text-xl md:text-2xl lg:text-3xl p-4 md:p-6 rounded-xl transition-all transform hover:scale-102 ${
                         selectedOption === index
                           ? option.isCorrect
                             ? 'bg-success-500 hover:bg-success-600 text-white'
