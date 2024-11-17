@@ -34,7 +34,6 @@ import { Input } from '@/components/ui/input'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-// API Configuration
 const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 const getHeaders = () => ({
   'Content-Type': 'application/json',
@@ -43,7 +42,6 @@ const getHeaders = () => ({
     : '',
 })
 
-// API Functions
 const fetchCards = async () => {
   const response = await fetch(`${baseUrl}/api/cards`, {
     method: 'GET',
@@ -86,7 +84,6 @@ const deleteCard = async (cardId) => {
   return response.json()
 }
 
-// Learning Card Component
 const LearningCard = ({ card, onDelete, onEdit }) => {
   const navigate = useNavigate()
 
@@ -176,7 +173,6 @@ const LearningCard = ({ card, onDelete, onEdit }) => {
   )
 }
 
-// Add Card Dialog Component
 const AddCardDialog = ({
   isFirstDialogOpen,
   isSecondDialogOpen,
@@ -450,7 +446,6 @@ const AddCardDialog = ({
   )
 }
 
-// Main Page Component
 const LearningCardsPage = () => {
   const navigate = useNavigate()
   const { toast } = useToast()
@@ -528,7 +523,7 @@ const LearningCardsPage = () => {
       id: card.id,
       wordPairs: card.wordPairs.map((pair) => ({
         ...pair,
-        learned: pair.learned || false, // Ensure learned status is preserved
+        learned: pair.learned || false, 
       })),
       title: card.title,
       targetDays: card.targetDays,
@@ -554,7 +549,7 @@ const LearningCardsPage = () => {
         {
           english: newCardData.currentEnglish.trim(),
           indonesian: newCardData.currentIndonesian.trim(),
-          learned: false, // New words start as unlearned
+          learned: false, 
         },
       ]
 

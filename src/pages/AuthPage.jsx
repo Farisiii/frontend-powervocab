@@ -131,7 +131,7 @@ const AuthPage = () => {
   })
   const [errors, setErrors] = useState({})
 
-  // Validation and form handling functions remain the same
+
   const validate = () => {
     const newErrors = {}
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/

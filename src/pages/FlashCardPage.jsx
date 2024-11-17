@@ -28,7 +28,6 @@ const FlashCardPage = () => {
         setIsLoading(true)
         const token = localStorage.getItem('token')
 
-        // Pertama, ambil data card
         const cardResponse = await fetch(`${baseUrl}/api/cards/${cardId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -43,7 +42,6 @@ const FlashCardPage = () => {
 
         const cardData = await cardResponse.json()
 
-        // Kemudian reset progress
         await fetch(`${baseUrl}/api/cards/${cardId}/reset-progress`, {
           method: 'PUT',
           headers: {
@@ -103,12 +101,10 @@ const FlashCardPage = () => {
     try {
       const token = localStorage.getItem('token')
 
-      // Update learned words state
       const updatedLearnedWords = [...learnedWords]
       if (currentWordLearned) {
         updatedLearnedWords.push(currentIndex)
       } else {
-        // Jika "Still Learning", hapus dari updatedLearnedWords jika ada
         const index = updatedLearnedWords.indexOf(currentIndex)
         if (index > -1) {
           updatedLearnedWords.splice(index, 1)
@@ -116,7 +112,6 @@ const FlashCardPage = () => {
       }
       setLearnedWords(updatedLearnedWords)
 
-      // Buat array updatedWordPairs dengan mempertahankan status isLearned kata-kata lain
       const updatedWordPairs = wordPairs.map((pair, index) => ({
         ...pair,
         isLearned:
@@ -171,7 +166,7 @@ const FlashCardPage = () => {
         title: 'Congratulations!',
         description: `You've completed all ${cardDetails.totalWords} words in this card!`,
       })
-      setTimeout(() => navigate(`/cards/${cardId}`), 1000) // Delay navigation
+      setTimeout(() => navigate(`/cards/${cardId}`), 1000)
     } else {
       setIsFlipped(false)
       setCurrentIndex(currentIndex + 1)
@@ -187,7 +182,7 @@ const FlashCardPage = () => {
         title: 'Session Complete',
         description: `You've reviewed all ${cardDetails.totalWords} words in this card!`,
       })
-      setTimeout(() => navigate(`/cards/${cardId}`), 1000) // Delay navigation
+      setTimeout(() => navigate(`/cards/${cardId}`), 1000)
     } else {
       setIsFlipped(false)
       setCurrentIndex(currentIndex + 1)

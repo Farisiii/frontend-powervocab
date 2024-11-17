@@ -12,7 +12,7 @@ const GameModePage = () => {
   const games = [
     {
       id: 'bubble-bath',
-      path: `/cards/${cardId}/games/bubble-bath`, // Fixed path
+      path: `/cards/${cardId}/games/bubble-bath`,
       title: 'Bubble Bath',
       description:
         'Pop vocabulary bubbles to match words with their meanings! A fun and relaxing way to learn.',
@@ -25,7 +25,7 @@ const GameModePage = () => {
     },
     {
       id: 'translation-game',
-      path: `/cards/${cardId}/games/translation-game`, // Fixed path
+      path: `/cards/${cardId}/games/translation-game`,
       title: 'Translation Game',
       description:
         'Test your memory by matching pairs of words! A classic game with a vocabulary twist.',
@@ -38,7 +38,7 @@ const GameModePage = () => {
     },
     {
       id: 'drag-drop-word-game',
-      path: `/cards/${cardId}/games/drag-drop-word-game`, // Fixed path
+      path: `/cards/${cardId}/games/drag-drop-word-game`,
       title: 'Drag Drop Word',
       description:
         'Complete engaging stories by filling in the missing words. Build context while you learn!',

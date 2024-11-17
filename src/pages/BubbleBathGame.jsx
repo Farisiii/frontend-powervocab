@@ -128,7 +128,6 @@ const BubbleBathGame = () => {
   }, [cardId, fetchWordPairs])
 
   const handleWordClick = (word) => {
-    // Jika kata sudah benar atau salah, abaikan klik
     if (
       matchedPairs.includes(word.pairId) ||
       incorrectPairs.includes(word.pairId)

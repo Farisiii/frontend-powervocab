@@ -129,7 +129,6 @@ const TranslationGame = () => {
       })
     }
 
-    // Move to next word after a delay
     setTimeout(() => {
       if (currentPairIndex < wordPairs.length - 1) {
         setCurrentPairIndex((prev) => prev + 1)
