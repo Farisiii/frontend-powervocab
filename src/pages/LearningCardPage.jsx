@@ -35,7 +35,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 // API Configuration
-const API_BASE_URL = 'http://localhost:5000/api'
+const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 const getHeaders = () => ({
   'Content-Type': 'application/json',
   Authorization: localStorage.getItem('token')
@@ -45,7 +45,7 @@ const getHeaders = () => ({
 
 // API Functions
 const fetchCards = async () => {
-  const response = await fetch(`${API_BASE_URL}/cards`, {
+  const response = await fetch(`${baseUrl}/api/cards`, {
     method: 'GET',
     headers: getHeaders(),
     credentials: 'include',
@@ -55,7 +55,7 @@ const fetchCards = async () => {
 }
 
 const createCard = async (cardData) => {
-  const response = await fetch(`${API_BASE_URL}/cards`, {
+  const response = await fetch(`${baseUrl}/api/cards`, {
     method: 'POST',
     headers: getHeaders(),
     credentials: 'include',
@@ -66,7 +66,7 @@ const createCard = async (cardData) => {
 }
 
 const updateCard = async (cardId, cardData) => {
-  const response = await fetch(`${API_BASE_URL}/cards/${cardId}`, {
+  const response = await fetch(`${baseUrl}/api/cards/${cardId}`, {
     method: 'PUT',
     headers: getHeaders(),
     credentials: 'include',
@@ -77,7 +77,7 @@ const updateCard = async (cardId, cardData) => {
 }
 
 const deleteCard = async (cardId) => {
-  const response = await fetch(`${API_BASE_URL}/cards/${cardId}`, {
+  const response = await fetch(`${baseUrl}/api/cards/${cardId}`, {
     method: 'DELETE',
     headers: getHeaders(),
     credentials: 'include',

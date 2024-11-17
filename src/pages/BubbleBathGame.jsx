@@ -14,7 +14,7 @@ import {
 } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
-const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
+const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
 const BubbleBathGame = () => {
   const { cardId } = useParams()

@@ -37,7 +37,7 @@ const CardDetailPage = () => {
 
       // Pastikan URL sesuai dengan konfigurasi backend
       const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
-      const response = await fetch(`${baseUrl}/cards/${cardId}`, {
+      const response = await fetch(`${baseUrl}/api/cards/${cardId}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,

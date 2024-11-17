@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card'
 import { ArrowLeft, Check, X } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 
-const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
+const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
 const FlashCardPage = () => {
   const { cardId } = useParams()
