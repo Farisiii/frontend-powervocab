@@ -72,33 +72,34 @@ const GameModePage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-accent-50 via-secondary-50 to-primary-50 px-4 py-6 sm:p-6 md:p-8 lg:p-12">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8 sm:mb-10 lg:mb-16">
+        <div className="w-full flex justify-start mb-6 lg:mb-8">
           <Button
             variant="ghost"
             onClick={() => navigate(`/cards/${cardId}`)}
-            className="mb-4 sm:mb-6 lg:mb-8 text-primary-400 hover:text-primary-500 hover:bg-primary-50 transition-all duration-300 text-sm sm:text-base lg:text-lg"
+            className="text-primary-400 hover:text-primary-500 hover:bg-accent-200 transition-colors duration-200 text-base md:text-lg lg:text-xl flex-shrink-0 mt-1"
           >
-            <ArrowLeft className="mr-2 h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5" />
-            Back to Card Details
+            <ArrowLeft className="mr-2 h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
+            <span className="hidden md:inline">Back to Cards</span>
+            <span className="md:hidden">Back</span>
           </Button>
-
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="space-y-2 sm:space-y-3 lg:space-y-4"
-          >
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-primary-400">
-              Choose Your Adventure
-            </h1>
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-primary-300">
-              Pick a game mode that suits your learning style!
-            </p>
-          </motion.div>
         </div>
 
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-12"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="space-y-2 sm:space-y-3 lg:space-y-4 text-center mb-4 sm:mb-8 lg:mb-16"
+        >
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-primary-400">
+            Choose Your Adventure
+          </h1>
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-primary-300">
+            Pick a game mode that suits your learning style!
+          </p>
+        </motion.div>
+
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-12 "
           variants={containerVariants}
           initial="hidden"
           animate="visible"

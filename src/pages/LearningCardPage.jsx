@@ -103,7 +103,7 @@ const LearningCard = ({ card, onDelete, onEdit }) => {
       className="relative group border-accent-200 hover:border-primary-400 transition-all duration-200 hover:shadow-lg cursor-pointer h-full"
       onClick={handleCardClick}
     >
-      <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+      <div className="absolute top-3 right-3 group-hover:opacity-100 md:transition-opacity md:duration-200 opacity-100 md:opacity-0 z-10">
         <div className="flex gap-2">
           <Button
             variant="ghost"
@@ -131,12 +131,8 @@ const LearningCard = ({ card, onDelete, onEdit }) => {
       </div>
 
       <CardHeader>
-        <CardTitle className="text-xl text-primary-400 pr-16 flex justify-between items-center">
-          <span>{card.title}</span>
-          <ArrowRight
-            size={20}
-            className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-primary-300"
-          />
+        <CardTitle className="text-xl text-primary-400 pr-16">
+          {card.title}
         </CardTitle>
       </CardHeader>
 
@@ -235,7 +231,7 @@ const AddCardDialog = ({
           <div className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <Input
-                placeholder="Kata dalam Bahasa Inggris"
+                placeholder="Kata Inggris"
                 value={newCardData.currentEnglish}
                 onChange={(e) =>
                   setNewCardData((prev) => ({
@@ -253,7 +249,7 @@ const AddCardDialog = ({
                 }}
               />
               <Input
-                placeholder="Kata dalam Bahasa Indonesia"
+                placeholder="Kata Indonesia"
                 value={newCardData.currentIndonesian}
                 onChange={(e) =>
                   setNewCardData((prev) => ({
@@ -523,7 +519,7 @@ const LearningCardsPage = () => {
       id: card.id,
       wordPairs: card.wordPairs.map((pair) => ({
         ...pair,
-        learned: pair.learned || false, 
+        learned: pair.learned || false,
       })),
       title: card.title,
       targetDays: card.targetDays,
@@ -549,7 +545,7 @@ const LearningCardsPage = () => {
         {
           english: newCardData.currentEnglish.trim(),
           indonesian: newCardData.currentIndonesian.trim(),
-          learned: false, 
+          learned: false,
         },
       ]
 

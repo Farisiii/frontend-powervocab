@@ -214,18 +214,19 @@ const BubbleBathGame = () => {
     <div className="min-h-screen w-full p-4 bg-gradient-to-b from-accent-100 to-accent-50">
       <Card className="w-full md:w-[95%] lg:w-[85%] max-w-[1400px] mx-auto bg-white shadow-xl">
         <CardHeader className="p-4">
-          <div className="flex items-center justify-between">
+          <div className="relative flex items-center justify-between">
             <Button
               onClick={handleBack}
               variant="ghost"
-              className="text-primary-600 hover:text-primary-700"
+              className="text-primary-400 hover:text-primary-500 hover:bg-accent-200 transition-colors duration-200 text-base md:text-lg lg:text-xl flex-shrink-0 mt-1 z-10"
             >
               <ArrowLeft className="w-6 h-6" />
+              Back
             </Button>
-            <CardTitle className="text-lg md:text-xl lg:text-2xl">
-              Bubble Bath Word Matching Game
+            <CardTitle className="absolute left-0 right-0 text-3xl z-0 font-bold text-primary-400">
+              Word Matching Game
             </CardTitle>
-            <div className="w-6" /> {/* Maintains layout balance */}
+            <div className="w-6" />
           </div>
         </CardHeader>
         <CardContent className="p-4">

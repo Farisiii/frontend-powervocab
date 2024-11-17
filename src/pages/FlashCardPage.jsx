@@ -204,20 +204,19 @@ const FlashCardPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-primary-50 p-4 md:p-6 lg:p-8">
-      <div className="container mx-auto px-4 max-w-screen-xl">
-        {/* Back button */}
+      <div className="mx-auto px-4 max-w-screen-xl">
         <div className="w-full flex justify-start mb-6 lg:mb-8">
           <Button
             variant="ghost"
             onClick={() => navigate(`/cards/${cardId}`)}
-            className="text-primary-400 hover:text-primary-500 hover:bg-accent-200 transition-colors duration-200 text-sm md:text-base"
+            className="text-primary-400 hover:text-primary-500 hover:bg-accent-200 transition-colors duration-200 text-base md:text-lg lg:text-xl flex-shrink-0 mt-1"
           >
-            <ArrowLeft className="mr-2 h-4 w-4 md:h-5 md:w-5" />
-            Back to Card Detail
+            <ArrowLeft className="mr-2 h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
+            <span className="hidden md:inline">Back to Cards</span>
+            <span className="md:hidden">Back</span>
           </Button>
         </div>
 
-        {/* Progress section */}
         <div className="mb-8 lg:mb-12 text-center space-y-2">
           <p className="text-primary-400 font-medium text-base md:text-lg lg:text-xl">
             Word {currentIndex + 1} of {cardDetails.totalWords}
@@ -234,7 +233,6 @@ const FlashCardPage = () => {
             of {cardDetails.totalWords} words)
           </p>
         </div>
-
         {/* Flashcard with improved responsive dimensions */}
         <div className="mx-auto mb-8 lg:mb-12 w-full max-w-4xl aspect-[3/2]">
           <Card
@@ -259,7 +257,6 @@ const FlashCardPage = () => {
             </div>
           </Card>
         </div>
-
         {/* Action buttons */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto px-4">
           <Button

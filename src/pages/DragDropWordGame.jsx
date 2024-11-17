@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
@@ -176,22 +176,27 @@ const DragDropWordGame = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-accent-100 to-accent-50 p-4">
       <div className="container mx-auto max-w-6xl lg:max-w-7xl">
-        <Button
-          onClick={handleBack}
-          variant="ghost"
-          className="mb-4 flex items-center gap-2 text-primary-600 hover:text-primary-700 text-xl"
-        >
-          <ArrowLeft className="w-10 h-10" />
-          Back
-        </Button>
-
         <Card className="bg-white shadow-lg">
+          <CardHeader className="p-4">
+            <div className="relative flex items-center justify-between">
+              <Button
+                onClick={handleBack}
+                variant="ghost"
+                className="text-primary-400 hover:text-primary-500 hover:bg-accent-200 transition-colors duration-200 text-base md:text-lg lg:text-xl flex-shrink-0 mt-1 z-10"
+              >
+                <ArrowLeft className="w-6 h-6" />
+                Back
+              </Button>
+              <CardTitle className="absolute left-0 right-0 text-3xl z-0 font-bold text-primary-400">
+                Drag Drop Word Game
+              </CardTitle>
+              <div className="w-6" />
+            </div>
+          </CardHeader>
           <CardContent className="p-8">
             {!gameStarted ? (
               <div className="space-y-6">
-                <h2 className="text-3xl font-bold text-primary-400 mb-6">
-                  Complete the Text
-                </h2>
+                <h2 className="text-xl lg:text-2xl mb-6">Complete the Text</h2>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">

@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
 import {
@@ -180,16 +180,23 @@ const TranslationGame = () => {
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-accent-100 to-accent-50">
       <div className="w-full md:w-[90%] lg:w-[80%] xl:w-[70%] mx-auto p-2 md:p-4">
-        <Button
-          onClick={handleBack}
-          variant="ghost"
-          className="mb-4 flex items-center gap-2 text-primary-600 hover:text-primary-700 text-xl"
-        >
-          <ArrowLeft className="w-8 h-8" />
-          Back
-        </Button>
-
         <Card className="shadow-lg">
+          <CardHeader className="p-4">
+            <div className="relative flex items-center justify-between">
+              <Button
+                onClick={handleBack}
+                variant="ghost"
+                className="text-primary-400 hover:text-primary-500 hover:bg-accent-200 transition-colors duration-200 text-base md:text-lg lg:text-xl flex-shrink-0 mt-1 z-10"
+              >
+                <ArrowLeft className="w-6 h-6" />
+                Back
+              </Button>
+              <CardTitle className="absolute left-0 right-0 text-3xl z-0 font-bold text-primary-400">
+                Translation Game
+              </CardTitle>
+              <div className="w-6" />
+            </div>
+          </CardHeader>
           <CardContent className="p-4 md:p-6 lg:p-8">
             <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
               <div className="text-xl md:text-2xl font-semibold text-primary-400">

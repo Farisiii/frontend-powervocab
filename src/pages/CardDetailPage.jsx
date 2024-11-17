@@ -100,16 +100,19 @@ const CardDetailPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-accent-50 to-white">
       <div className="px-4 sm:px-6 lg:px-8 py-6">
-        <div className="mb-8">
+        <div className="flex items-start gap-6 md:mb-4">
           <Button
             variant="ghost"
             onClick={() => navigate('/learning-cards')}
-            className="text-primary-400 hover:text-primary-500 hover:bg-accent-200 transition-colors duration-200 text-base md:text-lg lg:text-xl mb-4"
+            className="text-primary-400 hover:text-primary-500 hover:bg-accent-200 transition-colors duration-200 text-base md:text-lg lg:text-xl flex-shrink-0 mt-1"
           >
             <ArrowLeft className="mr-2 h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
-            Back to Cards
+            <span className="hidden md:inline">Back to Cards</span>
+            <span className="md:hidden">Back</span>
           </Button>
-          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-primary-400 mt-4 mb-3">
+        </div>
+        <div className="text-center mb-5 md:mb-10">
+          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-primary-400 mb-3">
             {cardData.title}
           </h1>
           <p className="text-primary-300 text-base md:text-xl lg:text-2xl">
