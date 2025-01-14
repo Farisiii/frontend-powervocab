@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
@@ -11,8 +11,13 @@ import {
   RotateCcw,
   Info,
   ArrowLeft,
+  PlayCircle,
+  BookOpen,
+  CheckCircle2,
+  XCircle,
 } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import confetti from 'canvas-confetti'
 
 const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
@@ -29,6 +34,12 @@ const BubbleBathGame = () => {
   const [selectedWord, setSelectedWord] = useState(null)
   const [incorrectPairs, setIncorrectPairs] = useState([])
   const [showInstructions, setShowInstructions] = useState(true)
+  const [gameStats, setGameStats] = useState({
+    attempts: 0,
+    correctMatches: 0,
+    startTime: null,
+    endTime: null,
+  })
 
   const handleBack = () => {
     navigate(-1)
@@ -119,6 +130,12 @@ const BubbleBathGame = () => {
     setIncorrectPairs([])
     setGameStarted(true)
     setSelectedWord(null)
+    setGameStats({
+      attempts: 0,
+      correctMatches: 0,
+      startTime: Date.now(),
+      endTime: null,
+    })
   }, [])
 
   useEffect(() => {
@@ -126,6 +143,15 @@ const BubbleBathGame = () => {
       fetchWordPairs()
     }
   }, [cardId, fetchWordPairs])
+
+  const triggerConfetti = () => {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#56A7F5', '#12B76A', '#F99A3D'],
+    })
+  }
 
   const handleWordClick = (word) => {
     if (
@@ -143,24 +169,41 @@ const BubbleBathGame = () => {
         return
       }
 
+      setGameStats((prev) => ({
+        ...prev,
+        attempts: prev.attempts + 1,
+      }))
+
       if (
         selectedWord.pairId === word.pairId &&
         selectedWord.type !== word.type
       ) {
         setMatchedPairs((prev) => [...prev, word.pairId])
         setIncorrectPairs((prev) => prev.filter((id) => id !== word.pairId))
+        setGameStats((prev) => ({
+          ...prev,
+          correctMatches: prev.correctMatches + 1,
+        }))
         toast({
           title: 'Perfect Match! 🎉',
           description: 'Keep up the great work!',
           variant: 'success',
         })
+
+        if (matchedPairs.length + 1 === wordPairs.length) {
+          triggerConfetti()
+          setGameStats((prev) => ({
+            ...prev,
+            endTime: Date.now(),
+          }))
+        }
       } else {
         setIncorrectPairs((prev) => [
           ...new Set([...prev, word.pairId, selectedWord.pairId]),
         ])
         toast({
-          title: 'Not quite right',
-          description: 'Try another pair!',
+          title: 'Try Again',
+          description: "Keep going, you're doing great!",
           variant: 'warning',
         })
       }
@@ -178,27 +221,51 @@ const BubbleBathGame = () => {
     setMatchedPairs([])
     setIncorrectPairs([])
     setSelectedWord(null)
+    setGameStats({
+      attempts: 0,
+      correctMatches: 0,
+      startTime: Date.now(),
+      endTime: null,
+    })
+  }
+
+  const calculateAccuracy = () => {
+    if (gameStats.attempts === 0) return 0
+    return ((gameStats.correctMatches / gameStats.attempts) * 100).toFixed(1)
+  }
+
+  const calculateTimeElapsed = () => {
+    if (!gameStats.startTime || !gameStats.endTime) return 0
+    return ((gameStats.endTime - gameStats.startTime) / 1000).toFixed(1)
   }
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-[400px] bg-accent-50 rounded-lg">
-        <Loader2 className="w-8 h-8 animate-spin text-primary-400" />
+      <div className="flex justify-center items-center min-h-[400px] bg-gradient-to-b from-primary-50 to-primary-100 rounded-lg">
+        <div className="text-center space-y-4">
+          <Loader2 className="w-12 h-12 animate-spin text-primary-400 mx-auto" />
+          <p className="text-primary-600 font-medium">Loading your game...</p>
+        </div>
       </div>
     )
   }
 
   if (error) {
     return (
-      <Card className="w-full max-w-4xl mx-auto bg-accent-50 shadow-xl">
+      <Card className="w-full max-w-4xl mx-auto bg-white shadow-xl">
         <CardContent className="p-8">
           <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
+            <AlertCircle className="h-5 w-5" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>{error}</AlertDescription>
           </Alert>
-          <div className="mt-4 flex justify-center">
-            <Button onClick={() => navigate('/cards')} variant="secondary">
+          <div className="mt-6 flex justify-center">
+            <Button
+              onClick={() => navigate('/cards')}
+              variant="secondary"
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
               Return to Cards
             </Button>
           </div>
@@ -211,203 +278,309 @@ const BubbleBathGame = () => {
     matchedPairs.length === wordPairs.length && wordPairs.length > 0
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-accent-100 to-accent-50 p-4">
-      <div className="w-full md:w-[90%] lg:w-[80%] xl:w-[70%] mx-auto p-2 md:p-4">
-        <div className="w-fit flex justify-start items-start text-start">
+    <div className="min-h-screen w-full bg-gradient-to-b from-primary-50 via-accent-50 to-secondary-50 p-4">
+      <div className="w-full max-w-7xl mx-auto p-2 md:p-6">
+        <div className="flex justify-between items-center mb-6">
           <Button
             onClick={handleBack}
             variant="ghost"
-            className="text-primary-400 hover:text-primary-500 hover:bg-accent-200 transition-colors duration-200 text-base  mt-1 z-10 md:hidden flex-1 "
+            className="text-primary-600 hover:text-primary-700 hover:bg-primary-100"
           >
-            <ArrowLeft className="w-6 h-6" />
-            Back
+            <ArrowLeft className="w-5 h-5 mr-2" />
+            Back to Cards
           </Button>
+
+          <h1 className="text-2xl md:text-3xl font-bold text-primary-600 hidden md:block">
+            Word Matching Game
+          </h1>
+
+          {gameStarted && (
+            <div className="flex items-center gap-4">
+              <Button
+                onClick={resetGame}
+                variant="outline"
+                className="flex items-center gap-2 border-primary-200 text-primary-600 hover:bg-primary-100"
+              >
+                <RotateCcw className="w-4 h-4" />
+                Reset
+              </Button>
+            </div>
+          )}
         </div>
 
-        <Card className="shadow-lg py-6 md:p-0 md:mt-8">
-          <CardHeader className="p-4">
-            <div className="relative flex items-center justify-between">
-              <Button
-                onClick={handleBack}
-                variant="ghost"
-                className="text-primary-400 hover:text-primary-500 hover:bg-accent-200 transition-colors duration-200 text-base md:text-lg lg:text-xl flex-shrink-0 mt-1 z-10 hidden md:inline"
-              >
-                <ArrowLeft className="w-6 h-6 hidden md:inline" />
-                Back
-              </Button>
-              <CardTitle className="absolute left-0 right-0 text-2xl md:text-3xl z-0 font-bold text-primary-400">
-                Word Matching Game
-              </CardTitle>
-              <div className="w-6" />
-            </div>
-          </CardHeader>
-          <CardContent className="p-4">
+        <Card className="shadow-xl bg-white/90 backdrop-blur-sm">
+          <CardContent className="p-4 md:p-6">
             {!gameStarted ? (
-              <div className="text-center space-y-6 py-8">
-                <div className="bg-gradient-to-r from-primary-400 to-primary-600 text-white p-6 rounded-lg shadow-lg mx-auto md:w-4/5 lg:w-3/4">
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                    Word Matching Game
-                  </h2>
-                  <p className="text-base md:text-lg opacity-90 mb-6">
-                    Match English words with their Indonesian translations!
-                  </p>
-                  <div className="bg-white/10 p-4 rounded-lg text-left space-y-2">
-                    <h3 className="font-semibold text-lg md:text-xl mb-2">
-                      How to Play:
-                    </h3>
-                    <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-                      <li>Click on a word to select it</li>
-                      <li>Click on its matching translation</li>
-                      <li>Correct matches will turn green</li>
-                      <li>Incorrect matches will turn red</li>
-                      <li>Match all pairs to win!</li>
-                    </ul>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center space-y-8 py-8 px-4"
+              >
+                <div className="max-w-2xl mx-auto space-y-6">
+                  <div className="bg-gradient-to-r from-primary-400 to-primary-600 text-white p-8 rounded-2xl shadow-lg">
+                    <BookOpen className="w-16 h-16 mx-auto mb-6 opacity-90" />
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                      Welcome to Word Matching!
+                    </h2>
+                    <p className="text-lg md:text-xl opacity-90 mb-8">
+                      Test your vocabulary by matching English words with their
+                      Indonesian translations.
+                    </p>
+                    <div className="bg-white/10 p-6 rounded-xl text-left space-y-4">
+                      <h3 className="font-semibold text-xl mb-3 flex items-center gap-2">
+                        <Info className="w-5 h-5" />
+                        How to Play
+                      </h3>
+                      <ul className="space-y-3 text-base">
+                        <li className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                            1
+                          </div>
+                          <span>Select a word from either column</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                            2
+                          </div>
+                          <span>Find its matching translation</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                            3
+                          </div>
+                          <span>Match all pairs to complete the game</span>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
-                </div>
-                <Button
-                  onClick={() => setGameStarted(true)}
-                  className="bg-success-500 hover:bg-success-600 text-white px-6 py-3 text-lg rounded-full transform transition-all hover:scale-105 shadow-lg"
-                >
-                  Start Game
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm p-3 rounded-lg shadow-sm flex flex-wrap gap-4 justify-between items-center">
-                  <h3 className="text-lg md:text-xl font-bold text-primary-400">
-                    Matches: {matchedPairs.length} / {wordPairs.length}
-                  </h3>
+
                   <Button
-                    onClick={resetGame}
-                    className="bg-accent-500 hover:bg-accent-600 text-white flex items-center gap-2"
+                    onClick={() => setGameStarted(true)}
+                    className="bg-success-500 hover:bg-success-600 text-white px-8 py-6 text-xl rounded-full transform transition-all hover:scale-105 shadow-lg flex items-center gap-3"
                   >
-                    <RotateCcw className="w-4 h-4" />
-                    Reset Game
+                    <PlayCircle className="w-6 h-6" />
+                    Start Game
                   </Button>
                 </div>
-
-                <div className="grid grid-cols-2 gap-3 md:gap-4 lg:gap-6">
-                  {/* English words column */}
-                  <div className="space-y-3 md:space-y-4">
-                    {words.left.map((word) => (
-                      <motion.div
-                        key={word.id}
-                        initial={{ opacity: 0, x: -50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className={`
-                        w-full h-16 md:h-20 lg:h-24 flex items-center justify-center
-                        rounded-xl cursor-pointer text-center p-3
-                        transform transition-all duration-300 hover:scale-105
-                        ${
-                          matchedPairs.includes(word.pairId) ||
-                          incorrectPairs.includes(word.pairId)
-                            ? 'cursor-not-allowed'
-                            : 'hover:bg-primary-100'
-                        }
-                        ${
-                          selectedWord?.id === word.id
-                            ? 'ring-4 ring-primary-400 bg-primary-100'
-                            : matchedPairs.includes(word.pairId)
-                            ? 'bg-success-100 text-success-700 border-2 border-success-500'
-                            : incorrectPairs.includes(word.pairId)
-                            ? 'bg-red-100 text-red-700 border-2 border-red-500'
-                            : 'bg-gradient-to-br from-primary-50 to-primary-100 border border-primary-200'
-                        }
-                      `}
-                        onClick={() => handleWordClick(word)}
-                      >
-                        <span className="text-sm md:text-base lg:text-lg font-medium px-2">
-                          {word.text}
+              </motion.div>
+            ) : (
+              <div className="space-y-6">
+                <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-sm">
+                  <div className="flex flex-wrap gap-4 justify-between items-center">
+                    <div className="flex items-center gap-4">
+                      <div className="bg-primary-100 text-primary-700 px-4 py-2 rounded-lg">
+                        <span className="font-semibold">
+                          {matchedPairs.length}
                         </span>
-                      </motion.div>
-                    ))}
-                  </div>
-
-                  {/* Indonesian words column */}
-                  <div className="space-y-3 md:space-y-4">
-                    {words.right.map((word) => (
-                      <motion.div
-                        key={word.id}
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className={`
-                        w-full h-16 md:h-20 lg:h-24 flex items-center justify-center
-                        rounded-xl cursor-pointer text-center p-3
-                        transform transition-all duration-300 hover:scale-105
-                        ${
-                          matchedPairs.includes(word.pairId) ||
-                          incorrectPairs.includes(word.pairId)
-                            ? 'cursor-not-allowed'
-                            : 'hover:bg-secondary-100'
-                        }
-                        ${
-                          selectedWord?.id === word.id
-                            ? 'ring-4 ring-secondary-400 bg-secondary-100'
-                            : matchedPairs.includes(word.pairId)
-                            ? 'bg-success-100 text-success-700 border-2 border-success-500'
-                            : incorrectPairs.includes(word.pairId)
-                            ? 'bg-red-100 text-red-700 border-2 border-red-500'
-                            : 'bg-gradient-to-br from-secondary-50 to-secondary-100 border border-secondary-200'
-                        }
-                      `}
-                        onClick={() => handleWordClick(word)}
-                      >
-                        <span className="text-sm md:text-base lg:text-lg font-medium px-2">
-                          {word.text}
+                        <span className="text-primary-500">
+                          /{wordPairs.length}
                         </span>
-                      </motion.div>
-                    ))}
+                        <span className="ml-2 text-sm">Matches</span>
+                      </div>
+
+                      <div className="bg-accent-100 text-accent-700 px-4 py-2 rounded-lg">
+                        <span className="font-semibold">
+                          {calculateAccuracy()}%
+                        </span>
+                        <span className="ml-2 text-sm">Accuracy</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {showInstructions && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="fixed bottom-4 right-4 max-w-sm bg-white/95 p-4 rounded-lg shadow-lg border border-accent-200"
-                  >
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="flex items-center gap-2">
-                        <Info className="w-5 h-5 text-primary-400" />
-                        <h4 className="font-semibold text-primary-400">
-                          Quick Tips
-                        </h4>
-                      </div>
-                      <button
-                        onClick={() => setShowInstructions(false)}
-                        className="text-accent-400 hover:text-accent-500"
-                      >
-                        ×
-                      </button>
+                <div className="flex flex-col space-y-4">
+                  <div className="grid grid-cols-2 gap-6">
+                    <h3 className="text-lg font-semibold text-primary-600 pl-2">
+                      English Words
+                    </h3>
+                    <h3 className="text-lg font-semibold text-secondary-600 pl-2">
+                      Indonesian Words
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                      {words.left.map((word) => (
+                        <motion.div
+                          key={word.id}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          className={`
+                            w-full h-16 flex items-center justify-center
+                            rounded-xl cursor-pointer text-center p-4
+                            transition-all duration-300 hover:scale-102
+                            shadow-sm hover:shadow-md
+                            ${
+                              matchedPairs.includes(word.pairId)
+                                ? 'bg-success-100 border-2 border-success-300 text-success-700'
+                                : incorrectPairs.includes(word.pairId)
+                                ? 'bg-error-100 border-2 border-error-300 text-error-700'
+                                : selectedWord?.id === word.id
+                                ? 'ring-4 ring-primary-400 bg-primary-100 text-primary-700'
+                                : 'bg-white hover:bg-primary-50 border border-primary-200 text-primary-800'
+                            }
+                          `}
+                          onClick={() => handleWordClick(word)}
+                        >
+                          <div className="flex items-center gap-2">
+                            {matchedPairs.includes(word.pairId) && (
+                              <CheckCircle2 className="w-5 h-5 text-success-500" />
+                            )}
+                            {incorrectPairs.includes(word.pairId) && (
+                              <XCircle className="w-5 h-5 text-error-500" />
+                            )}
+                            <span className="text-base md:text-lg font-medium">
+                              {word.text}
+                            </span>
+                          </div>
+                        </motion.div>
+                      ))}
                     </div>
-                    <ul className="text-sm space-y-1 text-accent-700">
-                      <li>• Click a word to select it</li>
-                      <li>• Click its matching translation</li>
-                      <li>• Green = Correct match</li>
-                      <li>• Red = Incorrect match</li>
-                    </ul>
-                  </motion.div>
-                )}
+
+                    <div className="space-y-3">
+                      {words.right.map((word) => (
+                        <motion.div
+                          key={word.id}
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          className={`
+                            w-full h-16 flex items-center justify-center
+                            rounded-xl cursor-pointer text-center p-4
+                            transition-all duration-300 hover:scale-102
+                            shadow-sm hover:shadow-md
+                            ${
+                              matchedPairs.includes(word.pairId)
+                                ? 'bg-success-100 border-2 border-success-300 text-success-700'
+                                : incorrectPairs.includes(word.pairId)
+                                ? 'bg-error-100 border-2 border-error-300 text-error-700'
+                                : selectedWord?.id === word.id
+                                ? 'ring-4 ring-secondary-400 bg-secondary-100 text-secondary-700'
+                                : 'bg-white hover:bg-secondary-50 border border-secondary-200 text-secondary-800'
+                            }
+                          `}
+                          onClick={() => handleWordClick(word)}
+                        >
+                          <div className="flex items-center gap-2">
+                            {matchedPairs.includes(word.pairId) && (
+                              <CheckCircle2 className="w-5 h-5 text-success-500" />
+                            )}
+                            {incorrectPairs.includes(word.pairId) && (
+                              <XCircle className="w-5 h-5 text-error-500" />
+                            )}
+                            <span className="text-base md:text-lg font-medium">
+                              {word.text}
+                            </span>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <AnimatePresence>
+                  {showInstructions && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 20, scale: 0.9 }}
+                      className="fixed bottom-6 right-6 max-w-sm"
+                    >
+                      <Card className="bg-white/95 backdrop-blur border-primary-200 shadow-lg">
+                        <CardContent className="p-4">
+                          <div className="flex justify-between items-start mb-3">
+                            <div className="flex items-center gap-2 text-primary-600">
+                              <Info className="w-5 h-5" />
+                              <h4 className="font-semibold">Quick Tips</h4>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="text-primary-400 hover:text-primary-600 -mt-1 -mr-2"
+                              onClick={() => setShowInstructions(false)}
+                            >
+                              ×
+                            </Button>
+                          </div>
+                          <ul className="space-y-2 text-sm text-primary-700">
+                            <li className="flex items-center gap-2">
+                              <div className="w-1.5 h-1.5 rounded-full bg-primary-400" />
+                              Click any word to select it
+                            </li>
+                            <li className="flex items-center gap-2">
+                              <div className="w-1.5 h-1.5 rounded-full bg-primary-400" />
+                              Find and click its matching translation
+                            </li>
+                            <li className="flex items-center gap-2">
+                              <div className="w-1.5 h-1.5 rounded-full bg-primary-400" />
+                              Green means correct match
+                            </li>
+                            <li className="flex items-center gap-2">
+                              <div className="w-1.5 h-1.5 rounded-full bg-primary-400" />
+                              Red means incorrect match
+                            </li>
+                          </ul>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 {isGameComplete && (
                   <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-center mt-8 bg-success-50 p-6 rounded-xl border-2 border-success-200 shadow-lg"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
                   >
-                    <Trophy className="w-12 h-12 text-success-500 mx-auto mb-4" />
-                    <h3 className="text-2xl font-bold text-success-700 mb-2">
-                      Congratulations!
-                    </h3>
-                    <p className="text-success-600 mb-4">
-                      You've matched all the words correctly!
-                    </p>
-                    <Button
-                      onClick={resetGame}
-                      className="bg-success-500 hover:bg-success-600 text-white"
-                    >
-                      Play Again
-                    </Button>
+                    <Card className="w-full max-w-lg bg-white shadow-2xl">
+                      <CardContent className="p-8 text-center">
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ delay: 0.2, type: 'spring' }}
+                        >
+                          <Trophy className="w-20 h-20 text-success-500 mx-auto mb-6" />
+                        </motion.div>
+                        <h3 className="text-3xl font-bold text-success-700 mb-4">
+                          Congratulations! 🎉
+                        </h3>
+                        <p className="text-lg text-success-600 mb-6">
+                          You've successfully matched all the words!
+                        </p>
+
+                        <div className="grid grid-cols-2 gap-4 mb-8">
+                          <div className="bg-success-50 p-4 rounded-lg">
+                            <div className="text-2xl font-bold text-success-700">
+                              {calculateAccuracy()}%
+                            </div>
+                            <div className="text-sm text-success-600">
+                              Accuracy
+                            </div>
+                          </div>
+                          <div className="bg-success-50 p-4 rounded-lg">
+                            <div className="text-2xl font-bold text-success-700">
+                              {calculateTimeElapsed()}s
+                            </div>
+                            <div className="text-sm text-success-600">Time</div>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                          <Button
+                            onClick={resetGame}
+                            className="bg-success-500 hover:bg-success-600 text-white"
+                          >
+                            Play Again
+                          </Button>
+                          <Button
+                            onClick={handleBack}
+                            variant="outline"
+                            className="border-success-300 text-success-700 hover:bg-success-50"
+                          >
+                            Back to Cards
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
                   </motion.div>
                 )}
               </div>

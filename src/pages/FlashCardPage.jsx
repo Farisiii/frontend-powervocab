@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { ArrowLeft, Check, X } from 'lucide-react'
+import { ArrowLeft, Check, X, RotateCw } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
+import { Progress } from '@/components/ui/progress'
 
 const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
@@ -21,6 +22,7 @@ const FlashCardPage = () => {
   })
   const { toast } = useToast()
   const [learnedWords, setLearnedWords] = useState([])
+  const [isAnimating, setIsAnimating] = useState(false)
 
   useEffect(() => {
     const fetchCardData = async () => {
@@ -94,7 +96,9 @@ const FlashCardPage = () => {
   }, [cardId])
 
   const handleCardFlip = () => {
+    setIsAnimating(true)
     setIsFlipped(!isFlipped)
+    setTimeout(() => setIsAnimating(false), 300)
   }
 
   const updateCardProgress = async (currentWordLearned) => {
@@ -163,10 +167,10 @@ const FlashCardPage = () => {
 
     if (currentIndex === wordPairs.length - 1) {
       toast({
-        title: 'Congratulations!',
+        title: 'Congratulations! 🎉',
         description: `You've completed all ${cardDetails.totalWords} words in this card!`,
       })
-      setTimeout(() => navigate(`/cards/${cardId}`), 1000)
+      setTimeout(() => navigate(`/cards/${cardId}`), 1500)
     } else {
       setIsFlipped(false)
       setCurrentIndex(currentIndex + 1)
@@ -182,7 +186,7 @@ const FlashCardPage = () => {
         title: 'Session Complete',
         description: `You've reviewed all ${cardDetails.totalWords} words in this card!`,
       })
-      setTimeout(() => navigate(`/cards/${cardId}`), 1000)
+      setTimeout(() => navigate(`/cards/${cardId}`), 1500)
     } else {
       setIsFlipped(false)
       setCurrentIndex(currentIndex + 1)
@@ -191,8 +195,11 @@ const FlashCardPage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-accent-50">
-        <div className="animate-pulse text-primary-400">Loading...</div>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+        <div className="animate-spin text-primary-600 mb-4">
+          <RotateCw className="w-8 h-8" />
+        </div>
+        <p className="text-primary-600 font-medium">Loading flashcards...</p>
       </div>
     )
   }
@@ -203,75 +210,88 @@ const FlashCardPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-primary-50 p-4 md:p-6 lg:p-8">
-      <div className="mx-auto px-4 max-w-screen-xl">
-        <div className="w-full flex justify-start mb-6 lg:mb-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 px-4 py-6 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header Section */}
+        <div className="flex items-center justify-between mb-8">
           <Button
             variant="ghost"
             onClick={() => navigate(`/cards/${cardId}`)}
-            className="text-primary-400 hover:text-primary-500 hover:bg-accent-200 transition-colors duration-200 text-base md:text-lg lg:text-xl flex-shrink-0 mt-1"
+            className="text-primary-600 hover:text-primary-700 hover:bg-primary-50"
           >
-            <ArrowLeft className="mr-2 h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
-            <span className="hidden md:inline">Back to Cards</span>
-            <span className="md:hidden">Back</span>
+            <ArrowLeft className="w-5 h-5 mr-2" />
+            <span className="hidden sm:inline">Back to Cards</span>
+            <span className="sm:hidden">Back</span>
           </Button>
+          <div className="text-right">
+            <p className="text-sm text-primary-600 font-medium">
+              Word {currentIndex + 1} of {cardDetails.totalWords}
+            </p>
+          </div>
         </div>
 
-        <div className="mb-8 lg:mb-12 text-center space-y-2">
-          <p className="text-primary-400 font-medium text-base md:text-lg lg:text-xl">
-            Word {currentIndex + 1} of {cardDetails.totalWords}
-          </p>
-          <div className="w-full bg-accent-200 rounded-full h-2 md:h-3 max-w-3xl mx-auto">
-            <div
-              className="bg-primary-400 h-full rounded-full transition-all duration-300"
-              style={{ width: `${cardDetails.progress}%` }}
-            />
-          </div>
-          <p className="text-primary-400 text-sm md:text-base lg:text-lg">
+        {/* Progress Section */}
+        <div className="mb-8">
+          <Progress value={cardDetails.progress} className="h-2" />
+          <p className="mt-2 text-sm text-primary-600 text-center">
             Progress: {cardDetails.progress}% (
             {Math.round((cardDetails.progress / 100) * cardDetails.totalWords)}{' '}
             of {cardDetails.totalWords} words)
           </p>
         </div>
-        {/* Flashcard with improved responsive dimensions */}
-        <div className="mx-auto mb-8 lg:mb-12 w-full max-w-4xl aspect-[3/2]">
-          <Card
-            className="w-full h-full cursor-pointer transition-all duration-700 perspective-1000 transform-style-preserve-3d hover:shadow-lg bg-white relative"
-            onClick={handleCardFlip}
-            style={{
-              transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-            }}
+
+        {/* Flashcard Section */}
+        <div className="relative w-full max-w-4xl mx-auto mb-8 aspect-[3/2]">
+          <div
+            className={`w-full h-full transition-transform duration-300 ${
+              isAnimating ? 'scale-95' : 'scale-100'
+            }`}
           >
-            <div className="absolute inset-0 flex items-center justify-center backface-hidden p-6 md:p-8 lg:p-12 bg-success-100">
-              <p className="text-2xl md:text-4xl lg:text-6xl font-bold text-primary-400 text-center">
-                {wordPairs[currentIndex]?.english || ''}
-              </p>
-            </div>
-            <div
-              className="absolute inset-0 flex items-center justify-center backface-hidden p-6 md:p-8 lg:p-12 bg-primary-100"
-              style={{ transform: 'rotateY(180deg)' }}
+            <Card
+              className={`w-full h-full cursor-pointer transition-all duration-300 bg-white shadow-lg hover:shadow-xl relative overflow-hidden rounded-2xl
+                ${isFlipped ? 'rotate-y-180' : ''}`}
+              onClick={handleCardFlip}
             >
-              <p className="text-2xl md:text-4xl lg:text-6xl font-bold text-primary-400 text-center">
-                {wordPairs[currentIndex]?.indonesian || ''}
-              </p>
-            </div>
-          </Card>
+              {/* Front Side */}
+              <div
+                className={`absolute inset-0 w-full h-full flex items-center justify-center p-8 
+                bg-gradient-to-br from-primary-50 to-primary-100 backface-hidden
+                ${isFlipped ? 'invisible' : 'visible'}`}
+              >
+                <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary-600 text-center">
+                  {wordPairs[currentIndex]?.english || ''}
+                </p>
+              </div>
+
+              {/* Back Side */}
+              <div
+                className={`absolute inset-0 w-full h-full flex items-center justify-center p-8 
+                bg-gradient-to-br from-purple-50 to-purple-100 backface-hidden rotate-y-180
+                ${isFlipped ? 'visible' : 'invisible'}`}
+              >
+                <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-purple-600 text-center">
+                  {wordPairs[currentIndex]?.indonesian || ''}
+                </p>
+              </div>
+            </Card>
+          </div>
         </div>
-        {/* Action buttons */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto px-4">
+
+        {/* Action Buttons */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto px-4">
           <Button
-            className="bg-success-600 hover:bg-success-700 text-white transition-colors duration-200 py-4 md:py-5 lg:py-6 text-base md:text-lg lg:text-xl"
+            className="bg-green-500 hover:bg-green-600 text-white font-semibold py-4 rounded-xl text-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
             onClick={handleKnown}
           >
-            <Check className="mr-2 h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />I Know
-            This
+            <Check className="w-5 h-5" />
+            <span>I Know This</span>
           </Button>
           <Button
-            className="bg-error-600 hover:bg-error-700 text-white transition-colors duration-200 py-4 md:py-5 lg:py-6 text-base md:text-lg lg:text-xl"
+            className="bg-rose-500 hover:bg-rose-600 text-white font-semibold py-4 rounded-xl text-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
             onClick={handleUnknown}
           >
-            <X className="mr-2 h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
-            Still Learning
+            <X className="w-5 h-5" />
+            <span>Still Learning</span>
           </Button>
         </div>
       </div>

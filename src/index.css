@@ -133,6 +133,23 @@
   .backface-hidden {
     backface-visibility: hidden;
   }
+
+  [data-dialog-backdrop],
+  [data-alert-dialog-backdrop] {
+    @apply bg-white/50 backdrop-blur-md;
+  }
+
+  .backdrop-blur-sm {
+    @apply backdrop-blur-md;
+  }
+
+  .dialog-overlay {
+    @apply bg-black/20 backdrop-blur-sm;
+  }
+
+  .dialog-content {
+    @apply bg-white/95 backdrop-blur-lg border border-slate-200;
+  }
 }
 
 @layer utilities {
