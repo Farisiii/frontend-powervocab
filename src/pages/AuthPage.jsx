@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
+// Pastikan lucide-react diimpor dengan benar
 import { Lock, Mail, Eye, EyeOff, User } from 'lucide-react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 
@@ -38,6 +39,7 @@ const AuthHeader = () => (
   </div>
 )
 
+// Perbaikan komponen FormInput untuk memastikan ikon ditampilkan dengan benar
 const FormInput = ({
   icon: Icon,
   type = 'text',
@@ -52,8 +54,8 @@ const FormInput = ({
 }) => (
   <div className="space-y-1">
     <div className="relative group">
-      <div className="absolute inset-y-0 left-3 flex items-center text-gray-400 group-hover:text-primary-500 transition-colors">
-        <Icon className="w-5 h-5" />
+      <div className="absolute inset-y-0 z-100 left-3 flex items-center text-gray-400 group-hover:text-primary-500 transition-colors">
+        {Icon && <Icon size={20} className="w-5 h-5" />}
       </div>
       <input
         type={isPassword ? (showPassword ? 'text' : 'password') : type}
@@ -61,6 +63,7 @@ const FormInput = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        autoComplete="off"
         className={`w-full pl-10 pr-12 py-3 rounded-xl border-2 transition-all duration-300
           ${error ? 'border-red-300 bg-red-50' : 'border-gray-200 bg-white/90'}
           focus:border-primary-400 focus:ring-2 focus:ring-primary-100 focus:outline-none
@@ -72,11 +75,7 @@ const FormInput = ({
           onClick={onTogglePassword}
           className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-600"
         >
-          {showPassword ? (
-            <EyeOff className="w-5 h-5" />
-          ) : (
-            <Eye className="w-5 h-5" />
-          )}
+          {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
         </button>
       )}
     </div>
@@ -278,7 +277,11 @@ const AuthPage = () => {
               {isLogin ? 'Welcome Back' : 'Create Account'}
             </h2>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-4"
+              autoComplete="off"
+            >
               {errors.submit && (
                 <div className="bg-red-50 text-red-500 p-3 rounded-lg text-sm text-center">
                   {errors.submit}

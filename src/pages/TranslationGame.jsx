@@ -162,10 +162,10 @@ const TranslationGame = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-primary-50 to-accent-50">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="w-12 h-12 animate-spin text-primary-500" />
-          <p className="text-lg text-primary-600 font-medium">
+      <div className="h-screen w-screen bg-primary-100 flex justify-center items-center overflow-hidden">
+        <div className="flex flex-col items-center gap-3">
+          <Loader2 className="w-10 h-10 animate-spin text-primary-600" />
+          <p className="text-base text-primary-700 font-medium">
             Loading game...
           </p>
         </div>
@@ -175,78 +175,85 @@ const TranslationGame = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary-50 to-accent-50 p-4 flex items-center justify-center">
-        <Alert variant="destructive" className="max-w-lg mx-auto">
-          <AlertCircle className="h-5 w-5" />
+      <div className="h-screen w-screen bg-primary-100 p-4 flex items-center justify-center overflow-hidden">
+        <Alert variant="destructive" className="max-w-md mx-auto">
+          <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error Loading Game</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
+          <AlertDescription className="text-sm">{error}</AlertDescription>
         </Alert>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-accent-50 to-secondary-50">
-      <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-        {/* Container for Back Button */}
+    <div className="min-h-screen bg-primary-100 p-3 sm:p-4 md:p-6 lg:p-8">
+      <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
+        {/* Back Button - Fixed to match GameModePage */}
         <div className="flex justify-start">
           <Button
-            onClick={handleBack}
             variant="ghost"
-            className="text-primary-600 hover:text-primary-700 hover:bg-primary-100"
+            onClick={() => navigate(`/cards/${cardId}/games`)}
+            className="text-primary-600 hover:text-primary-700 hover:bg-primary-200 transition-all duration-200 p-2 sm:p-3"
           >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            Back to Cards
+            <ArrowLeft className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="font-medium text-sm sm:text-base">
+              Back to Games
+            </span>
           </Button>
         </div>
 
-        {/* Main Game Card */}
-        <Card className="backdrop-blur-md bg-white/80 border-0 shadow-soft-xl">
-          <CardHeader className="p-6 border-b border-primary-100">
+        {/* Main Game Content */}
+        <Card className="bg-white/90 backdrop-blur-sm border-primary-200/50 shadow-lg">
+          {/* Card Header */}
+          <CardHeader className="px-4 py-3 sm:px-6 sm:py-4 border-b border-primary-200/40">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary-600 flex items-center gap-3">
-                <Globe className="w-8 h-8 text-primary-400" />
+              <CardTitle className="text-lg sm:text-xl lg:text-2xl font-bold text-primary-800 flex items-center gap-2">
+                <Globe className="w-5 h-5 sm:w-6 sm:h-6 text-primary-600" />
                 Translation Game
               </CardTitle>
-              <div className="flex items-center gap-2 text-lg font-semibold text-primary-500">
-                Score: {score}/{wordPairs.length}
+              <div className="flex items-center gap-1 text-sm sm:text-base font-semibold">
+                <span className="text-primary-700">Score:</span>
+                <span className="text-primary-800">
+                  {score}/{wordPairs.length}
+                </span>
               </div>
             </div>
           </CardHeader>
 
-          <CardContent className="p-6 lg:p-8">
+          {/* Card Content */}
+          <CardContent className="p-4 sm:p-6">
             {/* Game Controls */}
-            <div className="flex flex-col sm:flex-row justify-end gap-3 mb-8">
+            <div className="flex flex-col xs:flex-row justify-end gap-2 mb-4 sm:mb-6">
               <Button
                 onClick={toggleGameMode}
                 variant="outline"
-                className="flex items-center gap-2 bg-white text-primary-600 hover:bg-primary-50 border-primary-200"
+                size="sm"
+                className="flex items-center gap-1.5 bg-white text-primary-700 hover:bg-primary-50 border-primary-300 text-xs sm:text-sm"
               >
-                <ArrowLeftRight className="w-4 h-4" />
-                {gameMode === 'en-to-id'
-                  ? 'Switch to Indonesian'
-                  : 'Switch to English'}
+                <ArrowLeftRight className="w-3 h-3 sm:w-4 sm:h-4" />
+                {gameMode === 'en-to-id' ? 'ID → EN' : 'EN → ID'}
               </Button>
               <Button
                 onClick={resetGame}
                 variant="outline"
-                className="flex items-center gap-2 bg-white text-secondary-600 hover:bg-secondary-50 border-secondary-200"
+                size="sm"
+                className="flex items-center gap-1.5 bg-white text-secondary-700 hover:bg-secondary-50 border-secondary-300 text-xs sm:text-sm"
               >
-                <RotateCcw className="w-4 h-4" />
-                Reset Game
+                <RotateCcw className="w-3 h-3 sm:w-4 sm:h-4" />
+                Reset
               </Button>
             </div>
 
             {!gameComplete ? (
-              <div className="space-y-8">
+              <div className="space-y-4 sm:space-y-6">
                 {/* Word Display */}
-                <div className="text-center p-8 lg:p-12 bg-gradient-to-br from-primary-50 to-accent-50 rounded-2xl shadow-soft-md">
-                  <h2 className="text-xl sm:text-2xl font-medium text-primary-600 mb-4">
+                <div className="text-center p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-primary-50 to-accent-50 rounded-xl border border-primary-200/30">
+                  <h2 className="text-sm sm:text-base font-medium text-primary-700 mb-2 sm:mb-3">
                     {gameMode === 'en-to-id'
                       ? 'Translate to Indonesian:'
                       : 'Translate to English:'}
                   </h2>
-                  <p className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary-700 font-display">
+                  <p className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-primary-800 font-display leading-tight">
                     {gameMode === 'en-to-id'
                       ? wordPairs[currentPairIndex]?.english
                       : wordPairs[currentPairIndex]?.indonesian}
@@ -254,47 +261,51 @@ const TranslationGame = () => {
                 </div>
 
                 {/* Options Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   {options.map((option, index) => (
                     <Button
                       key={index}
                       onClick={() => handleOptionSelect(option, index)}
                       disabled={selectedOption !== null}
-                      className={`min-h-[80px] sm:min-h-[100px] text-lg sm:text-xl lg:text-2xl p-6 rounded-xl transition-all duration-300 transform hover:-translate-y-1 ${
+                      className={`min-h-16 sm:min-h-20 text-sm sm:text-base lg:text-lg p-3 sm:p-4 rounded-lg transition-all duration-200 ${
                         selectedOption === index
                           ? option.isCorrect
-                            ? 'bg-success-500 hover:bg-success-600 text-white shadow-success-200/50'
-                            : 'bg-error-500 hover:bg-error-600 text-white shadow-error-200/50'
-                          : 'bg-white hover:bg-primary-50 text-primary-700 border-2 border-primary-200 shadow-soft-md hover:shadow-soft-lg'
+                            ? 'bg-success-500 hover:bg-success-500 text-white border-success-600'
+                            : 'bg-error-500 hover:bg-error-500 text-white border-error-600'
+                          : 'bg-white hover:bg-primary-50 text-primary-800 border-2 border-primary-200 hover:border-primary-300 shadow-sm hover:shadow-md'
                       }`}
                     >
-                      {option.text}
+                      <span className="leading-tight break-words">
+                        {option.text}
+                      </span>
                     </Button>
                   ))}
                 </div>
               </div>
             ) : (
               // Game Complete Screen
-              <div className="text-center space-y-8 py-12">
+              <div className="flex flex-col items-center justify-center text-center space-y-4 sm:space-y-6 py-8 sm:py-12">
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-32 h-32 bg-warning-100 rounded-full animate-ping-slow opacity-75" />
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 bg-warning-100 rounded-full animate-ping-slow opacity-75" />
                   </div>
-                  <Trophy className="w-32 h-32 text-warning-400 mx-auto relative animate-bounce-slow" />
+                  <Trophy className="w-20 h-20 sm:w-24 sm:h-24 text-warning-500 mx-auto relative animate-bounce-slow" />
                 </div>
-                <div className="space-y-4">
-                  <h2 className="text-4xl font-bold text-primary-600">
+                <div className="space-y-2 sm:space-y-3">
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary-800">
                     Game Complete!
                   </h2>
-                  <p className="text-2xl text-primary-500">
+                  <p className="text-lg sm:text-xl lg:text-2xl text-primary-700 font-semibold">
                     Final Score: {score}/{wordPairs.length}
                   </p>
-                  <Button
-                    onClick={resetGame}
-                    className="mt-8 bg-primary-500 hover:bg-primary-600 text-white text-xl px-12 py-6 rounded-xl shadow-soft-lg hover:shadow-soft-xl transition-all duration-300"
-                  >
-                    Play Again
-                  </Button>
+                  <div className="pt-2 sm:pt-4">
+                    <Button
+                      onClick={resetGame}
+                      className="bg-primary-600 hover:bg-primary-700 text-white text-sm sm:text-base px-6 sm:px-8 py-2 sm:py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+                    >
+                      Play Again
+                    </Button>
+                  </div>
                 </div>
               </div>
             )}

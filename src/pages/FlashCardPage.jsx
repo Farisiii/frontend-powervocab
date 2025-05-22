@@ -195,11 +195,11 @@ const FlashCardPage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-        <div className="animate-spin text-primary-600 mb-4">
-          <RotateCw className="w-8 h-8" />
+      <div className="flex justify-center items-center min-h-screen bg-primary-100">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin" />
+          <p className="text-primary-700 text-lg font-medium">Loading...</p>
         </div>
-        <p className="text-primary-600 font-medium">Loading flashcards...</p>
       </div>
     )
   }
@@ -210,91 +210,134 @@ const FlashCardPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 px-4 py-6 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
-        <div className="flex items-center justify-between mb-8">
+    <div className="h-screen bg-primary-100 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col px-3 py-3 sm:px-4 sm:py-4 lg:px-6 lg:py-6">
+        {/* Header Section - Fixed height */}
+        <div className="flex items-center justify-between mb-3 sm:mb-4 flex-shrink-0">
           <Button
             variant="ghost"
             onClick={() => navigate(`/cards/${cardId}`)}
-            className="text-primary-600 hover:text-primary-700 hover:bg-primary-50"
+            className="text-primary-700 hover:text-primary-800 hover:bg-primary-200 px-2 py-1 sm:px-3 sm:py-2"
+            size="sm"
           >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            <span className="hidden sm:inline">Back to Cards</span>
-            <span className="sm:hidden">Back</span>
+            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
+            <span className="text-sm sm:text-base">Back</span>
           </Button>
           <div className="text-right">
-            <p className="text-sm text-primary-600 font-medium">
-              Word {currentIndex + 1} of {cardDetails.totalWords}
+            <p className="text-xs sm:text-sm text-primary-700 font-medium">
+              {currentIndex + 1} / {cardDetails.totalWords}
             </p>
           </div>
         </div>
 
-        {/* Progress Section */}
-        <div className="mb-8">
-          <Progress value={cardDetails.progress} className="h-2" />
-          <p className="mt-2 text-sm text-primary-600 text-center">
+        {/* Progress Section - Fixed height */}
+        <div className="mb-2 sm:mb-3 md:mb-4 flex-shrink-0">
+          <Progress
+            value={cardDetails.progress}
+            className="h-1.5 sm:h-2 bg-primary-200"
+          />
+          <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-primary-700 text-center font-medium">
             Progress: {cardDetails.progress}% (
             {Math.round((cardDetails.progress / 100) * cardDetails.totalWords)}{' '}
-            of {cardDetails.totalWords} words)
+            of {cardDetails.totalWords})
           </p>
         </div>
 
-        {/* Flashcard Section */}
-        <div className="relative w-full max-w-4xl mx-auto mb-8 aspect-[3/2]">
-          <div
-            className={`w-full h-full transition-transform duration-300 ${
-              isAnimating ? 'scale-95' : 'scale-100'
-            }`}
-          >
-            <Card
-              className={`w-full h-full cursor-pointer transition-all duration-300 bg-white shadow-lg hover:shadow-xl relative overflow-hidden rounded-2xl
-                ${isFlipped ? 'rotate-y-180' : ''}`}
-              onClick={handleCardFlip}
+        {/* Flashcard Section - Fixed flip animation */}
+        <div className="flex-1 flex items-center justify-center mb-2 sm:mb-3 md:mb-4 px-2 sm:px-4 min-h-0">
+          <div className="w-full max-w-xs sm:max-w-sm md:max-w-lg lg:max-w-2xl xl:max-w-4xl h-full max-h-96 sm:max-h-none">
+            <div
+              className={`flip-card w-full h-full transition-transform duration-300 ${
+                isAnimating ? 'scale-95' : 'scale-100'
+              }`}
+              style={{
+                aspectRatio: '4/3',
+                minHeight: '200px',
+                maxHeight: '400px',
+                perspective: '1000px',
+              }}
             >
-              {/* Front Side */}
               <div
-                className={`absolute inset-0 w-full h-full flex items-center justify-center p-8 
-                bg-gradient-to-br from-primary-50 to-primary-100 backface-hidden
-                ${isFlipped ? 'invisible' : 'visible'}`}
+                className={`flip-card-inner w-full h-full relative transition-transform duration-600 ${
+                  isFlipped ? 'flipped' : ''
+                }`}
+                onClick={handleCardFlip}
               >
-                <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary-600 text-center">
-                  {wordPairs[currentIndex]?.english || ''}
-                </p>
-              </div>
+                {/* Front Side */}
+                <Card className="flip-card-front absolute inset-0 w-full h-full cursor-pointer bg-white shadow-lg hover:shadow-xl rounded-xl sm:rounded-2xl border-2 border-primary-200 hover:border-primary-300">
+                  <div className="w-full h-full flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 bg-gradient-to-br from-primary-50 to-secondary-100">
+                    <p className="text-base sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-primary-800 text-center leading-tight">
+                      {wordPairs[currentIndex]?.english || ''}
+                    </p>
+                  </div>
+                </Card>
 
-              {/* Back Side */}
-              <div
-                className={`absolute inset-0 w-full h-full flex items-center justify-center p-8 
-                bg-gradient-to-br from-purple-50 to-purple-100 backface-hidden rotate-y-180
-                ${isFlipped ? 'visible' : 'invisible'}`}
-              >
-                <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-purple-600 text-center">
-                  {wordPairs[currentIndex]?.indonesian || ''}
-                </p>
+                {/* Back Side */}
+                <Card className="flip-card-back absolute inset-0 w-full h-full cursor-pointer bg-white shadow-lg hover:shadow-xl rounded-xl sm:rounded-2xl border-2 border-accent-200 hover:border-accent-300">
+                  <div className="w-full h-full flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 bg-gradient-to-br from-accent-50 to-accent-100">
+                    <p className="text-base sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-accent-800 text-center leading-tight">
+                      {wordPairs[currentIndex]?.indonesian || ''}
+                    </p>
+                  </div>
+                </Card>
               </div>
-            </Card>
+            </div>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto px-4">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4 max-w-xs sm:max-w-sm md:max-w-lg mx-auto px-2 sm:px-4 flex-shrink-0 pb-2 sm:pb-0">
           <Button
-            className="bg-green-500 hover:bg-green-600 text-white font-semibold py-4 rounded-xl text-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+            className="bg-success-500 hover:bg-success-600 text-white font-semibold py-2.5 sm:py-3 md:py-4 rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base lg:text-lg transition-all duration-200 flex items-center justify-center gap-1 sm:gap-2 shadow-md hover:shadow-lg border-2 border-success-600 hover:border-success-700 min-h-10 sm:min-h-12 md:min-h-14"
             onClick={handleKnown}
           >
-            <Check className="w-5 h-5" />
-            <span>I Know This</span>
+            <Check className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+            <span className="hidden xs:inline">I Know This</span>
+            <span className="xs:hidden">Know</span>
           </Button>
           <Button
-            className="bg-rose-500 hover:bg-rose-600 text-white font-semibold py-4 rounded-xl text-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+            className="bg-error-500 hover:bg-error-600 text-white font-semibold py-2.5 sm:py-3 md:py-4 rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base lg:text-lg transition-all duration-200 flex items-center justify-center gap-1 sm:gap-2 shadow-md hover:shadow-lg border-2 border-error-600 hover:border-error-700 min-h-10 sm:min-h-12 md:min-h-14"
             onClick={handleUnknown}
           >
-            <X className="w-5 h-5" />
-            <span>Still Learning</span>
+            <X className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+            <span className="hidden xs:inline">Still Learning</span>
+            <span className="xs:hidden">Learning</span>
           </Button>
         </div>
       </div>
+
+      {/* CSS for 3D flip animation */}
+      <style jsx>{`
+        .flip-card {
+          perspective: 1000px;
+        }
+
+        .flip-card-inner {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          text-align: center;
+          transition: transform 0.6s;
+          transform-style: preserve-3d;
+        }
+
+        .flip-card-inner.flipped {
+          transform: rotateY(180deg);
+        }
+
+        .flip-card-front,
+        .flip-card-back {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+        }
+
+        .flip-card-back {
+          transform: rotateY(180deg);
+        }
+      `}</style>
     </div>
   )
 }
