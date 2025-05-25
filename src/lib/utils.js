@@ -13,7 +13,7 @@ export const getGridColumns = () => {
     'md:grid-cols-2': true, // Medium screens (768px+)
     'lg:grid-cols-3': true, // Large screens (1024px+)
     'xl:grid-cols-3': true, // XL screens (1280px+)
-    '2xl:grid-cols-4': true, // 2XL screens (1536px+)
+    '2xl:grid-cols-3': true, // 2XL screens (1536px+)
   }
 }
 

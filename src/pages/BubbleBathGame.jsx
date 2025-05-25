@@ -290,8 +290,8 @@ const BubbleBathGame = () => {
     matchedPairs.length === wordPairs.length && wordPairs.length > 0
 
   return (
-    <div className="min-h-screen w-full bg-primary-100 p-3 sm:p-4 md:p-6">
-      <div className="w-full max-w-7xl mx-auto">
+    <div className="min-h-screen w-full bg-primary-100 p-3 sm:p-4 md:p-6 lg:p-8">
+      <div className="w-full max-w-none lg:max-w-6xl xl:max-w-7xl 2xl:max-w-8xl mx-auto">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 space-y-3 sm:space-y-0">
           <Button
@@ -303,7 +303,7 @@ const BubbleBathGame = () => {
             <span className="text-sm sm:text-base">Back to Cards</span>
           </Button>
 
-          <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-primary-700 text-center sm:text-left">
+          <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-primary-700 text-center sm:text-left">
             Word Matching Game
           </h1>
 
@@ -320,44 +320,44 @@ const BubbleBathGame = () => {
         </div>
 
         <Card className="shadow-soft-xl bg-white/95 backdrop-blur-sm">
-          <CardContent className="p-3 sm:p-4 md:p-6">
+          <CardContent className="p-3 sm:p-4 md:p-6 lg:p-8 xl:p-10">
             {!gameStarted ? (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="text-center space-y-6 sm:space-y-8 py-6 sm:py-8 px-3 sm:px-4"
               >
-                <div className="max-w-2xl mx-auto space-y-4 sm:space-y-6">
-                  <div className="bg-gradient-to-r from-primary-500 to-primary-600 text-white p-4 sm:p-6 md:p-8 rounded-2xl shadow-soft-lg">
-                    <BookOpen className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-4 sm:mb-6 opacity-90" />
-                    <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-4">
+                <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6">
+                  <div className="bg-gradient-to-r from-primary-500 to-primary-600 text-white p-6 sm:p-8 md:p-10 lg:p-12 xl:p-16 rounded-2xl shadow-soft-lg">
+                    <BookOpen className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 xl:w-24 xl:h-24 mx-auto mb-4 sm:mb-6 opacity-90" />
+                    <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-2 sm:mb-4">
                       Welcome to Word Matching!
                     </h2>
-                    <p className="text-sm sm:text-base md:text-lg lg:text-xl opacity-90 mb-4 sm:mb-6 md:mb-8">
+                    <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl opacity-90 mb-4 sm:mb-6 md:mb-8">
                       Test your vocabulary by matching English words with their
                       Indonesian translations. This game uses up to 8 word pairs
                       for optimal learning experience.
                     </p>
-                    <div className="bg-white/10 p-3 sm:p-4 md:p-6 rounded-xl text-left space-y-3 sm:space-y-4">
-                      <h3 className="font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3 flex items-center gap-2">
-                        <Info className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <div className="bg-white/10 p-4 sm:p-6 md:p-8 lg:p-10 rounded-xl text-left space-y-3 sm:space-y-4">
+                      <h3 className="font-semibold text-base sm:text-lg md:text-xl lg:text-2xl mb-2 sm:mb-3 flex items-center gap-2">
+                        <Info className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
                         How to Play
                       </h3>
-                      <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm md:text-base">
-                        <li className="flex items-center gap-2 sm:gap-3">
-                          <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full bg-white/20 flex items-center justify-center text-xs sm:text-sm font-semibold">
+                      <ul className="space-y-2 sm:space-y-3 lg:space-y-4 text-xs sm:text-sm md:text-base lg:text-lg">
+                        <li className="flex items-center gap-2 sm:gap-3 lg:gap-4">
+                          <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-10 lg:h-10 rounded-full bg-white/20 flex items-center justify-center text-xs sm:text-sm lg:text-base font-semibold">
                             1
                           </div>
                           <span>Select a word from either column</span>
                         </li>
-                        <li className="flex items-center gap-2 sm:gap-3">
-                          <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full bg-white/20 flex items-center justify-center text-xs sm:text-sm font-semibold">
+                        <li className="flex items-center gap-2 sm:gap-3 lg:gap-4">
+                          <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-10 lg:h-10 rounded-full bg-white/20 flex items-center justify-center text-xs sm:text-sm lg:text-base font-semibold">
                             2
                           </div>
                           <span>Find its matching translation</span>
                         </li>
-                        <li className="flex items-center gap-2 sm:gap-3">
-                          <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full bg-white/20 flex items-center justify-center text-xs sm:text-sm font-semibold">
+                        <li className="flex items-center gap-2 sm:gap-3 lg:gap-4">
+                          <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-10 lg:h-10 rounded-full bg-white/20 flex items-center justify-center text-xs sm:text-sm lg:text-base font-semibold">
                             3
                           </div>
                           <span>Match all pairs to complete the game</span>
@@ -368,45 +368,45 @@ const BubbleBathGame = () => {
 
                   <Button
                     onClick={() => setGameStarted(true)}
-                    className="bg-success-500 hover:bg-success-600 text-white px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg md:text-xl rounded-full transform transition-all hover:scale-105 shadow-soft-md flex items-center gap-2 sm:gap-3"
+                    className="bg-success-500 hover:bg-success-600 text-white px-6 sm:px-8 lg:px-12 py-4 sm:py-6 lg:py-8 text-base sm:text-lg md:text-xl lg:text-2xl rounded-full transform transition-all hover:scale-105 shadow-soft-md flex items-center gap-2 sm:gap-3"
                   >
-                    <PlayCircle className="w-5 h-5 sm:w-6 sm:h-6" />
+                    <PlayCircle className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8" />
                     Start Game
                   </Button>
                 </div>
               </motion.div>
             ) : (
-              <div className="space-y-4 sm:space-y-6">
+              <div className="space-y-4 sm:space-y-6 lg:space-y-8">
                 {/* Game Stats */}
-                <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm p-3 sm:p-4 rounded-xl shadow-soft-sm">
-                  <div className="flex flex-wrap gap-2 sm:gap-4 justify-center sm:justify-between items-center">
-                    <div className="flex items-center gap-2 sm:gap-4">
-                      <div className="bg-primary-100 text-primary-700 px-3 sm:px-4 py-2 rounded-lg border border-primary-200">
-                        <span className="font-semibold text-sm sm:text-base">
+                <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm p-3 sm:p-4 lg:p-6 rounded-xl shadow-soft-sm">
+                  <div className="flex flex-wrap gap-2 sm:gap-4 lg:gap-6 justify-center lg:justify-between items-center">
+                    <div className="flex items-center gap-2 sm:gap-4 lg:gap-6">
+                      <div className="bg-primary-100 text-primary-700 px-3 sm:px-4 lg:px-6 py-2 lg:py-3 rounded-lg border border-primary-200">
+                        <span className="font-semibold text-sm sm:text-base lg:text-lg xl:text-xl">
                           {matchedPairs.length}
                         </span>
-                        <span className="text-primary-500 text-sm sm:text-base">
+                        <span className="text-primary-500 text-sm sm:text-base lg:text-lg xl:text-xl">
                           /{wordPairs.length}
                         </span>
-                        <span className="ml-1 sm:ml-2 text-xs sm:text-sm">
+                        <span className="ml-1 sm:ml-2 text-xs sm:text-sm lg:text-base">
                           Matches
                         </span>
                       </div>
 
-                      <div className="bg-secondary-100 text-secondary-700 px-3 sm:px-4 py-2 rounded-lg border border-secondary-200">
-                        <span className="font-semibold text-sm sm:text-base">
+                      <div className="bg-secondary-100 text-secondary-700 px-3 sm:px-4 lg:px-6 py-2 lg:py-3 rounded-lg border border-secondary-200">
+                        <span className="font-semibold text-sm sm:text-base lg:text-lg xl:text-xl">
                           {calculateAccuracy()}%
                         </span>
-                        <span className="ml-1 sm:ml-2 text-xs sm:text-sm">
+                        <span className="ml-1 sm:ml-2 text-xs sm:text-sm lg:text-base">
                           Accuracy
                         </span>
                       </div>
                     </div>
 
-                    <div className="bg-accent-100 text-accent-700 px-3 sm:px-4 py-2 rounded-lg border border-accent-200">
+                    <div className="bg-accent-100 text-accent-700 px-3 sm:px-4 lg:px-6 py-2 lg:py-3 rounded-lg border border-accent-200">
                       <div className="flex items-center gap-1 sm:gap-2">
-                        <Target className="w-3 h-3 sm:w-4 sm:h-4" />
-                        <span className="text-xs sm:text-sm">
+                        <Target className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5" />
+                        <span className="text-xs sm:text-sm lg:text-base">
                           {gameStats.attempts} attempts
                         </span>
                       </div>
@@ -415,29 +415,29 @@ const BubbleBathGame = () => {
                 </div>
 
                 {/* Column Headers */}
-                <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6">
-                  <h3 className="text-sm sm:text-base md:text-lg font-semibold text-primary-600 pl-2 flex items-center gap-2">
-                    <span className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-primary-500"></span>
+                <div className="grid grid-cols-2 gap-4 sm:gap-6 md:gap-8 lg:gap-12 xl:gap-16">
+                  <h3 className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-semibold text-primary-600 pl-2 flex items-center gap-2">
+                    <span className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 rounded-full bg-primary-500"></span>
                     English Words
                   </h3>
-                  <h3 className="text-sm sm:text-base md:text-lg font-semibold text-secondary-600 pl-2 flex items-center gap-2">
-                    <span className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-secondary-500"></span>
+                  <h3 className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-semibold text-secondary-600 pl-2 flex items-center gap-2">
+                    <span className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 rounded-full bg-secondary-500"></span>
                     Indonesian Words
                   </h3>
                 </div>
 
                 {/* Word Columns */}
-                <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6">
+                <div className="grid grid-cols-2 gap-4 sm:gap-6 md:gap-8 lg:gap-12 xl:gap-16">
                   {/* English Words */}
-                  <div className="space-y-2 sm:space-y-3">
+                  <div className="space-y-2 sm:space-y-3 lg:space-y-4">
                     {words.left.map((word) => (
                       <motion.div
                         key={word.id}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         className={`
-                          w-full min-h-12 sm:min-h-14 md:min-h-16 flex items-center justify-center
-                          rounded-xl cursor-pointer text-center p-2 sm:p-3 md:p-4
+                          w-full min-h-12 sm:min-h-14 md:min-h-16 lg:min-h-20 xl:min-h-24 flex items-center justify-center
+                          rounded-xl cursor-pointer text-center p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8
                           transition-all duration-300 hover:scale-102
                           shadow-soft-sm hover:shadow-soft-md
                           ${
@@ -452,14 +452,14 @@ const BubbleBathGame = () => {
                         `}
                         onClick={() => handleWordClick(word)}
                       >
-                        <div className="flex items-center gap-1 sm:gap-2">
+                        <div className="flex items-center gap-1 sm:gap-2 lg:gap-3">
                           {matchedPairs.includes(word.pairId) && (
-                            <CheckCircle2 className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-success-500 flex-shrink-0" />
+                            <CheckCircle2 className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-success-500 flex-shrink-0" />
                           )}
                           {incorrectPairs.includes(word.pairId) && (
-                            <XCircle className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-error-500 flex-shrink-0" />
+                            <XCircle className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-error-500 flex-shrink-0" />
                           )}
-                          <span className="text-xs sm:text-sm md:text-base lg:text-lg font-medium break-words">
+                          <span className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-medium break-words">
                             {word.text}
                           </span>
                         </div>
@@ -468,15 +468,15 @@ const BubbleBathGame = () => {
                   </div>
 
                   {/* Indonesian Words */}
-                  <div className="space-y-2 sm:space-y-3">
+                  <div className="space-y-2 sm:space-y-3 lg:space-y-4">
                     {words.right.map((word) => (
                       <motion.div
                         key={word.id}
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         className={`
-                          w-full min-h-12 sm:min-h-14 md:min-h-16 flex items-center justify-center
-                          rounded-xl cursor-pointer text-center p-2 sm:p-3 md:p-4
+                          w-full min-h-12 sm:min-h-14 md:min-h-16 lg:min-h-20 xl:min-h-24 flex items-center justify-center
+                          rounded-xl cursor-pointer text-center p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8
                           transition-all duration-300 hover:scale-102
                           shadow-soft-sm hover:shadow-soft-md
                           ${
@@ -491,14 +491,14 @@ const BubbleBathGame = () => {
                         `}
                         onClick={() => handleWordClick(word)}
                       >
-                        <div className="flex items-center gap-1 sm:gap-2">
+                        <div className="flex items-center gap-1 sm:gap-2 lg:gap-3">
                           {matchedPairs.includes(word.pairId) && (
-                            <CheckCircle2 className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-success-500 flex-shrink-0" />
+                            <CheckCircle2 className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-success-500 flex-shrink-0" />
                           )}
                           {incorrectPairs.includes(word.pairId) && (
-                            <XCircle className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-error-500 flex-shrink-0" />
+                            <XCircle className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-error-500 flex-shrink-0" />
                           )}
-                          <span className="text-xs sm:text-sm md:text-base lg:text-lg font-medium break-words">
+                          <span className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-medium break-words">
                             {word.text}
                           </span>
                         </div>
@@ -514,14 +514,14 @@ const BubbleBathGame = () => {
                       initial={{ opacity: 0, y: 50, scale: 0.9 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 20, scale: 0.9 }}
-                      className="fixed bottom-4 right-4 max-w-xs sm:max-w-sm z-20"
+                      className="fixed bottom-4 right-4 max-w-xs sm:max-w-sm lg:max-w-md z-20"
                     >
                       <Card className="bg-white/95 backdrop-blur border-primary-200 shadow-soft-lg">
-                        <CardContent className="p-3 sm:p-4">
+                        <CardContent className="p-3 sm:p-4 lg:p-6">
                           <div className="flex justify-between items-start mb-2 sm:mb-3">
                             <div className="flex items-center gap-1 sm:gap-2 text-primary-600">
-                              <Info className="w-4 h-4 sm:w-5 sm:h-5" />
-                              <h4 className="font-semibold text-sm sm:text-base">
+                              <Info className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
+                              <h4 className="font-semibold text-sm sm:text-base lg:text-lg">
                                 Quick Tips
                               </h4>
                             </div>
@@ -534,21 +534,21 @@ const BubbleBathGame = () => {
                               ×
                             </Button>
                           </div>
-                          <ul className="space-y-1 sm:space-y-2 text-xs sm:text-sm text-primary-700">
+                          <ul className="space-y-1 sm:space-y-2 lg:space-y-3 text-xs sm:text-sm lg:text-base text-primary-700">
                             <li className="flex items-center gap-2">
-                              <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-primary-400 flex-shrink-0" />
+                              <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 lg:w-2 lg:h-2 rounded-full bg-primary-400 flex-shrink-0" />
                               Click any word to select it
                             </li>
                             <li className="flex items-center gap-2">
-                              <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-primary-400 flex-shrink-0" />
+                              <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 lg:w-2 lg:h-2 rounded-full bg-primary-400 flex-shrink-0" />
                               Find and click its matching translation
                             </li>
                             <li className="flex items-center gap-2">
-                              <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-success-400 flex-shrink-0" />
+                              <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 lg:w-2 lg:h-2 rounded-full bg-success-400 flex-shrink-0" />
                               Green means correct match
                             </li>
                             <li className="flex items-center gap-2">
-                              <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-error-400 flex-shrink-0" />
+                              <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 lg:w-2 lg:h-2 rounded-full bg-error-400 flex-shrink-0" />
                               Red means incorrect match
                             </li>
                           </ul>
@@ -565,55 +565,55 @@ const BubbleBathGame = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
                   >
-                    <Card className="w-full max-w-sm sm:max-w-md lg:max-w-lg bg-white shadow-soft-xl">
-                      <CardContent className="p-4 sm:p-6 md:p-8 text-center">
+                    <Card className="w-full max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl bg-white shadow-soft-xl">
+                      <CardContent className="p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 text-center">
                         <motion.div
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
                           transition={{ delay: 0.2, type: 'spring' }}
                         >
-                          <Trophy className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 text-success-500 mx-auto mb-4 sm:mb-6" />
+                          <Trophy className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 text-success-500 mx-auto mb-4 sm:mb-6" />
                         </motion.div>
-                        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-success-700 mb-2 sm:mb-4">
+                        <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-success-700 mb-2 sm:mb-4">
                           Congratulations! 🎉
                         </h3>
-                        <p className="text-sm sm:text-base md:text-lg text-success-600 mb-4 sm:mb-6">
+                        <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-success-600 mb-4 sm:mb-6 lg:mb-8">
                           You've successfully matched all the words!
                         </p>
 
-                        <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-4 sm:mb-6 md:mb-8">
-                          <div className="bg-success-50 p-3 sm:p-4 rounded-lg border border-success-200">
-                            <div className="text-lg sm:text-xl md:text-2xl font-bold text-success-700">
+                        <div className="grid grid-cols-2 gap-2 sm:gap-4 lg:gap-6 mb-4 sm:mb-6 md:mb-8 lg:mb-10">
+                          <div className="bg-success-50 p-3 sm:p-4 lg:p-6 xl:p-8 rounded-lg border border-success-200">
+                            <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-success-700">
                               {calculateAccuracy()}%
                             </div>
-                            <div className="text-xs sm:text-sm text-success-600">
+                            <div className="text-xs sm:text-sm lg:text-base xl:text-lg text-success-600">
                               Accuracy
                             </div>
                           </div>
-                          <div className="bg-success-50 p-3 sm:p-4 rounded-lg border border-success-200">
-                            <div className="text-lg sm:text-xl md:text-2xl font-bold text-success-700">
+                          <div className="bg-success-50 p-3 sm:p-4 lg:p-6 xl:p-8 rounded-lg border border-success-200">
+                            <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-success-700">
                               {calculateTimeElapsed()}s
                             </div>
-                            <div className="text-xs sm:text-sm text-success-600">
+                            <div className="text-xs sm:text-sm lg:text-base xl:text-lg text-success-600">
                               Time
                             </div>
                           </div>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
+                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 lg:gap-4 justify-center">
                           <Button
                             onClick={resetGame}
-                            className="bg-success-500 hover:bg-success-600 text-white text-sm sm:text-base"
+                            className="bg-success-500 hover:bg-success-600 text-white text-sm sm:text-base lg:text-lg xl:text-xl px-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4"
                           >
-                            <Zap className="w-4 h-4 mr-2" />
+                            <Zap className="w-4 h-4 lg:w-5 lg:h-5 xl:w-6 xl:h-6 mr-2" />
                             Play Again
                           </Button>
                           <Button
                             onClick={handleBack}
                             variant="outline"
-                            className="border-success-300 text-success-700 hover:bg-success-50 text-sm sm:text-base"
+                            className="border-success-300 text-success-700 hover:bg-success-50 text-sm sm:text-base lg:text-lg xl:text-xl px-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4"
                           >
-                            <ArrowLeft className="w-4 h-4 mr-2" />
+                            <ArrowLeft className="w-4 h-4 lg:w-5 lg:h-5 xl:w-6 xl:h-6 mr-2" />
                             Back to Cards
                           </Button>
                         </div>

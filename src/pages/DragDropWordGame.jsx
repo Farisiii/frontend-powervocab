@@ -4,10 +4,11 @@ import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { ArrowLeft, HelpCircle, RefreshCw, Type, Trophy } from 'lucide-react'
 
-const DragDropWordGame = () => {
+const ClickWordGame = () => {
   const [inputText, setInputText] = useState('')
   const [puzzleStructure, setPuzzleStructure] = useState([])
   const [availableWords, setAvailableWords] = useState([])
+  const [selectedWord, setSelectedWord] = useState(null)
   const [score, setScore] = useState(0)
   const [gameStarted, setGameStarted] = useState(false)
   const [error, setError] = useState('')
@@ -79,64 +80,67 @@ const DragDropWordGame = () => {
     setAvailableWords(hidden)
     setGameStarted(true)
     setError('')
+    setSelectedWord(null)
   }
 
-  const handleDragStart = (e, word) => {
-    e.dataTransfer.setData('text/plain', JSON.stringify(word))
-    e.target.classList.add('opacity-50')
+  const handleWordClick = (word) => {
+    setSelectedWord(selectedWord?.id === word.id ? null : word)
   }
 
-  const handleDragEnd = (e) => {
-    e.target.classList.remove('opacity-50')
-  }
+  const handleSlotClick = (targetSlot) => {
+    if (!selectedWord || !targetSlot.isHidden) return
 
-  const handleDragOver = (e) => {
-    e.preventDefault()
-    e.currentTarget.classList.add('border-primary-400')
-  }
+    // Check if the selected word is already placed somewhere
+    const existingSlot = puzzleStructure.find(
+      (slot) => slot.currentWord === selectedWord.word
+    )
 
-  const handleDragLeave = (e) => {
-    e.currentTarget.classList.remove('border-primary-400')
-  }
-
-  const handleDrop = (e, targetId) => {
-    e.preventDefault()
-    e.currentTarget.classList.remove('border-primary-400')
-
-    try {
-      const droppedWord = JSON.parse(e.dataTransfer.getData('text/plain'))
-
-      const existingSlot = puzzleStructure.find(
-        (slot) => slot.currentWord === droppedWord.word
-      )
-
-      if (existingSlot) {
-        setPuzzleStructure((prev) =>
-          prev.map((slot) =>
-            slot.id === existingSlot.id ? { ...slot, currentWord: null } : slot
-          )
-        )
-      } else {
-        setAvailableWords((prev) => prev.filter((w) => w.id !== droppedWord.id))
-      }
-
+    if (existingSlot) {
+      // Remove word from existing slot
       setPuzzleStructure((prev) =>
-        prev.map((slot) => {
-          if (slot.id === targetId) {
-            if (slot.currentWord) {
-              setAvailableWords((prev) => [
-                ...prev,
-                { id: `word-${Date.now()}`, word: slot.currentWord },
-              ])
-            }
-            return { ...slot, currentWord: droppedWord.word }
-          }
-          return slot
-        })
+        prev.map((slot) =>
+          slot.id === existingSlot.id ? { ...slot, currentWord: null } : slot
+        )
       )
-    } catch (err) {
-      console.error('Error handling drop:', err)
+    } else {
+      // Remove word from available words
+      setAvailableWords((prev) => prev.filter((w) => w.id !== selectedWord.id))
     }
+
+    // Place word in target slot
+    setPuzzleStructure((prev) =>
+      prev.map((slot) => {
+        if (slot.id === targetSlot.id) {
+          // If slot already has a word, return it to available words
+          if (slot.currentWord) {
+            setAvailableWords((prev) => [
+              ...prev,
+              { id: `word-${Date.now()}`, word: slot.currentWord },
+            ])
+          }
+          return { ...slot, currentWord: selectedWord.word }
+        }
+        return slot
+      })
+    )
+
+    // Clear selection
+    setSelectedWord(null)
+  }
+
+  const handleFilledSlotClick = (slot) => {
+    if (!slot.isHidden || !slot.currentWord) return
+
+    // Return word to available words
+    setAvailableWords((prev) => [
+      ...prev,
+      { id: `word-${Date.now()}`, word: slot.currentWord },
+    ])
+
+    // Clear the slot
+    setPuzzleStructure((prev) =>
+      prev.map((s) => (s.id === slot.id ? { ...s, currentWord: null } : s))
+    )
   }
 
   const checkAnswers = () => {
@@ -188,96 +192,105 @@ const DragDropWordGame = () => {
     setError('')
     setAvailableWords([])
     setPuzzleStructure([])
+    setSelectedWord(null)
   }
 
   return (
-    <div className="min-h-screen bg-primary-100 p-3 sm:p-4 md:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
-        {/* Back Button */}
-        <div className="flex justify-start">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+      <div className="max-w-6xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="flex justify-between items-center">
           <Button
             onClick={() => window.history.back()}
             variant="ghost"
-            className="text-primary-600 hover:text-primary-700 hover:bg-primary-200 transition-all duration-200 p-2 sm:p-3"
+            className="text-blue-600 hover:text-blue-700 hover:bg-blue-100"
           >
-            <ArrowLeft className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-            <span className="font-medium text-sm sm:text-base">
-              Back to Cards
-            </span>
+            <ArrowLeft className="mr-2 h-5 w-5" />
+            Back
           </Button>
+          {gameStarted && (
+            <div className="flex items-center gap-4">
+              <div className="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-lg border shadow-sm">
+                <span className="text-sm font-medium text-gray-700">
+                  Score:{' '}
+                </span>
+                <span className="text-lg font-bold text-blue-600">
+                  {score}/
+                  {puzzleStructure.filter((item) => item.isHidden).length}
+                </span>
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Main Game Content */}
-        <Card className="bg-white/90 backdrop-blur-sm border-primary-200/50 shadow-lg">
-          {/* Card Header */}
-          <CardHeader className="px-4 py-3 sm:px-6 sm:py-4 border-b border-primary-200/40">
+        {/* Main Game Card */}
+        <Card className="bg-white/90 backdrop-blur-sm shadow-xl border-0">
+          <CardHeader className="border-b bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg sm:text-xl lg:text-2xl font-bold text-primary-800 flex items-center gap-2">
-                <Type className="w-5 h-5 sm:w-6 sm:h-6 text-primary-600" />
-                Word Completion Game
+              <CardTitle className="text-2xl font-bold flex items-center gap-3">
+                <Type className="w-7 h-7" />
+                Word Completion Challenge
               </CardTitle>
-              <div className="flex items-center gap-2 sm:gap-4">
-                {gameStarted && (
-                  <div className="flex items-center gap-1 text-sm sm:text-base font-semibold">
-                    <span className="text-primary-700">Score:</span>
-                    <span className="text-primary-800">
-                      {score}/
-                      {puzzleStructure.filter((item) => item.isHidden).length}
-                    </span>
-                  </div>
-                )}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-primary-600 hover:bg-primary-200 p-1 sm:p-2"
-                  onClick={() => setShowTutorial(!showTutorial)}
-                >
-                  <HelpCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-                </Button>
-              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white hover:bg-white/20"
+                onClick={() => setShowTutorial(!showTutorial)}
+              >
+                <HelpCircle className="w-5 h-5" />
+              </Button>
             </div>
 
             {/* Tutorial */}
             {showTutorial && (
-              <div className="mt-4 bg-primary-50 p-4 rounded-lg border border-primary-200/40">
-                <h3 className="font-semibold mb-2 text-primary-800 text-sm sm:text-base">
-                  How to Play:
-                </h3>
-                <ol className="list-decimal list-inside space-y-1 text-primary-700 text-xs sm:text-sm">
-                  <li>Enter a text with at least 10 words</li>
-                  <li>Some words will be removed and shown below</li>
+              <div className="mt-4 bg-white/10 backdrop-blur-sm p-4 rounded-lg border border-white/20">
+                <h3 className="font-semibold mb-3 text-white">How to Play:</h3>
+                <ol className="list-decimal list-inside space-y-2 text-white/90 text-sm">
+                  <li>Enter text with at least 10 words</li>
+                  <li>Some words will be hidden and shown below</li>
                   <li>
-                    Drag and drop the words back to their correct positions
+                    <strong>Click a word</strong> to select it (highlighted in
+                    blue)
                   </li>
-                  <li>Click "Check Answers" to see your score</li>
+                  <li>
+                    <strong>Click an empty slot</strong> to place the selected
+                    word
+                  </li>
+                  <li>
+                    <strong>Click filled slots</strong> to remove words back to
+                    available list
+                  </li>
+                  <li>Use "Check Answers" to see your score</li>
                 </ol>
               </div>
             )}
           </CardHeader>
 
-          {/* Card Content */}
-          <CardContent className="p-4 sm:p-6">
+          <CardContent className="p-6">
             {!gameStarted ? (
-              <div className="space-y-4 sm:space-y-6">
-                <div className="space-y-3 sm:space-y-4">
-                  <label className="block text-base sm:text-lg font-medium text-primary-800">
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  <label className="block text-lg font-semibold text-gray-800">
                     Enter your text (minimum 10 words):
                   </label>
                   <textarea
                     placeholder="Type or paste your text here..."
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
-                    className="w-full min-h-48 sm:min-h-56 p-3 sm:p-4 rounded-lg border-2 border-primary-200 
-                      focus:border-primary-400 focus:ring-2 focus:ring-primary-200 focus:outline-none
-                      bg-white text-primary-800 placeholder-primary-400 text-sm sm:text-base
+                    className="w-full min-h-48 p-4 rounded-xl border-2 border-gray-200 
+                      focus:border-blue-400 focus:ring-4 focus:ring-blue-100 focus:outline-none
+                      bg-white text-gray-800 placeholder-gray-400 text-base
                       transition-all duration-200"
                   />
+                  <div className="text-sm text-gray-600">
+                    Word count: {getWordCount(inputText)} / 10 minimum
+                  </div>
                   {error && (
                     <Alert
                       variant="destructive"
-                      className="bg-error-50 border-error-200"
+                      className="bg-red-50 border-red-200"
                     >
-                      <AlertDescription className="text-error-700 text-sm">
+                      <AlertDescription className="text-red-700">
                         {error}
                       </AlertDescription>
                     </Alert>
@@ -286,91 +299,124 @@ const DragDropWordGame = () => {
                 <Button
                   onClick={() => createPuzzle(inputText)}
                   disabled={getWordCount(inputText) < 10}
-                  className="w-full py-4 sm:py-6 text-sm sm:text-lg bg-primary-600 hover:bg-primary-700 
-                    text-white shadow-md hover:shadow-lg transition-all duration-200 
-                    disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                  className="w-full py-6 text-lg bg-gradient-to-r from-blue-500 to-indigo-600 
+                    hover:from-blue-600 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl 
+                    transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed 
+                    font-semibold rounded-xl"
                 >
-                  Start Challenge
+                  🚀 Start Challenge
                 </Button>
               </div>
             ) : gameComplete ? (
               // Game Complete Screen
-              <div className="flex flex-col items-center justify-center text-center space-y-4 sm:space-y-6 py-8 sm:py-12">
+              <div className="flex flex-col items-center justify-center text-center space-y-6 py-12">
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-20 h-20 sm:w-24 sm:h-24 bg-warning-100 rounded-full animate-ping opacity-75" />
+                    <div className="w-24 h-24 bg-yellow-200 rounded-full animate-ping opacity-75" />
                   </div>
-                  <Trophy className="w-20 h-20 sm:w-24 sm:h-24 text-warning-500 mx-auto relative" />
+                  <Trophy className="w-24 h-24 text-yellow-500 mx-auto relative animate-bounce" />
                 </div>
-                <div className="space-y-2 sm:space-y-3">
-                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary-800">
-                    Congratulations!
+                <div className="space-y-3">
+                  <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                    🎉 Congratulations! 🎉
                   </h2>
-                  <p className="text-lg sm:text-xl lg:text-2xl text-primary-700 font-semibold">
-                    Final Score: {score}/
+                  <p className="text-2xl text-gray-700 font-semibold">
+                    Perfect Score: {score}/
                     {puzzleStructure.filter((item) => item.isHidden).length}
                   </p>
-                  <div className="pt-2 sm:pt-4">
+                  <div className="pt-4">
                     <Button
                       onClick={resetGame}
-                      className="bg-primary-600 hover:bg-primary-700 text-white text-sm sm:text-base 
-                        px-6 sm:px-8 py-2 sm:py-3 rounded-lg shadow-md hover:shadow-lg 
-                        transition-all duration-200"
+                      className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 
+                        hover:to-blue-600 text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl 
+                        transition-all duration-200 font-semibold"
                     >
-                      Play Again
+                      🔄 Play Again
                     </Button>
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="space-y-4 sm:space-y-6">
+              <div className="space-y-6">
                 {/* Game Controls */}
-                <div className="flex flex-col xs:flex-row justify-end gap-2">
+                <div className="flex justify-between items-center">
+                  {selectedWord ? (
+                    <div className="flex items-center gap-3 bg-blue-50 border-2 border-blue-200 rounded-xl px-4 py-2">
+                      <span className="text-sm text-blue-700 font-medium">
+                        Selected:
+                      </span>
+                      <span className="text-base text-blue-800 font-bold bg-blue-100 px-3 py-1 rounded-lg">
+                        "{selectedWord.word}"
+                      </span>
+                      <Button
+                        onClick={() => setSelectedWord(null)}
+                        variant="ghost"
+                        size="sm"
+                        className="text-blue-600 hover:text-blue-800 hover:bg-blue-100 p-1 h-auto ml-2"
+                      >
+                        ✕
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="text-gray-500 text-sm italic">
+                      👆 Click a word below to select it
+                    </div>
+                  )}
+
                   <Button
                     onClick={resetGame}
                     variant="outline"
                     size="sm"
-                    className="flex items-center gap-1.5 bg-white text-secondary-700 hover:bg-secondary-50 
-                      border-secondary-300 text-xs sm:text-sm"
+                    className="flex items-center gap-2 hover:bg-gray-50"
                   >
-                    <RefreshCw className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <RefreshCw className="w-4 h-4" />
                     New Game
                   </Button>
                 </div>
 
                 {/* Text Display */}
-                <div
-                  className="p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-primary-50 to-accent-50 
-                  rounded-xl border border-primary-200/30"
-                >
-                  <h3 className="text-sm sm:text-base font-medium text-primary-700 mb-3 sm:mb-4">
-                    Complete the text by dragging words to the empty spaces:
+                <div className="p-6 bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl border-2 border-gray-200">
+                  <h3 className="text-base font-semibold text-gray-700 mb-4">
+                    💡 Complete the text by selecting words and clicking empty
+                    spaces:
                   </h3>
-                  <div className="text-sm sm:text-base lg:text-lg leading-relaxed text-primary-800">
+                  <div className="text-lg leading-relaxed text-gray-800">
                     {puzzleStructure.map((item, idx) => (
                       <React.Fragment key={item.id}>
                         {idx > 0 && ' '}
                         {item.isHidden ? (
                           <span
-                            onDragOver={handleDragOver}
-                            onDragLeave={handleDragLeave}
-                            onDrop={(e) => handleDrop(e, item.id)}
+                            onClick={() =>
+                              item.currentWord
+                                ? handleFilledSlotClick(item)
+                                : handleSlotClick(item)
+                            }
                             className={`
-                              inline-flex min-w-16 sm:min-w-20 lg:min-w-24 min-h-8 sm:min-h-10 
-                              items-center justify-center border-2 border-dashed rounded-lg 
-                              px-2 sm:px-3 py-1 sm:py-2 mx-1 transition-all duration-200 cursor-pointer
-                              text-xs sm:text-sm lg:text-base font-medium
+                              inline-flex min-w-24 min-h-10 items-center justify-center 
+                              border-2 border-dashed rounded-lg px-3 py-2 mx-1 
+                              transition-all duration-200 cursor-pointer font-medium
+                              hover:scale-105 active:scale-95
                               ${
                                 item.currentWord
-                                  ? 'border-success-400 bg-success-50 text-success-800'
-                                  : 'border-primary-300 hover:border-primary-400 bg-white hover:bg-primary-50'
+                                  ? 'border-green-400 bg-green-50 text-green-800 hover:bg-green-100 shadow-sm'
+                                  : selectedWord
+                                  ? 'border-blue-400 bg-blue-50 hover:bg-blue-100 text-blue-700 animate-pulse'
+                                  : 'border-gray-300 hover:border-blue-400 bg-white hover:bg-blue-50 text-gray-600'
                               }
                             `}
+                            title={
+                              item.currentWord
+                                ? 'Click to remove this word'
+                                : selectedWord
+                                ? `Click to place "${selectedWord.word}" here`
+                                : 'Select a word first, then click here'
+                            }
                           >
-                            {item.currentWord || ''}
+                            {item.currentWord ||
+                              (selectedWord ? '📍 Place here' : '❓')}
                           </span>
                         ) : (
-                          <span className="text-primary-800 font-medium">
+                          <span className="text-gray-800 font-medium">
                             {item.originalWord}
                           </span>
                         )}
@@ -380,38 +426,53 @@ const DragDropWordGame = () => {
                 </div>
 
                 {/* Available Words */}
-                <div className="space-y-3 sm:space-y-4">
-                  <h3 className="text-base sm:text-lg font-semibold text-primary-800">
-                    Available Words:
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                    🎯 Available Words
+                    <span className="text-sm font-normal text-gray-600">
+                      (click to select)
+                    </span>
                   </h3>
-                  <div className="flex flex-wrap gap-2 sm:gap-3">
+                  <div className="flex flex-wrap gap-3">
                     {availableWords.map((word) => (
-                      <div
+                      <button
                         key={word.id}
-                        draggable
-                        onDragStart={(e) => handleDragStart(e, word)}
-                        onDragEnd={handleDragEnd}
-                        className="bg-white hover:bg-primary-50 border-2 border-primary-200 
-                          hover:border-primary-300 px-3 sm:px-4 py-2 sm:py-3 rounded-lg cursor-move 
-                          shadow-sm hover:shadow-md text-primary-800 font-medium 
-                          text-sm sm:text-base transition-all duration-200 select-none
-                          active:scale-95"
+                        onClick={() => handleWordClick(word)}
+                        className={`
+                          border-2 px-4 py-3 rounded-xl cursor-pointer shadow-md hover:shadow-lg 
+                          font-semibold text-base transition-all duration-200 select-none
+                          hover:scale-105 active:scale-95
+                          ${
+                            selectedWord?.id === word.id
+                              ? 'bg-gradient-to-r from-blue-500 to-indigo-500 border-blue-400 text-white shadow-blue-200'
+                              : 'bg-white hover:bg-gray-50 border-gray-200 hover:border-blue-300 text-gray-800'
+                          }
+                        `}
                       >
                         {word.word}
-                      </div>
+                        {selectedWord?.id === word.id && (
+                          <span className="ml-2">✓</span>
+                        )}
+                      </button>
                     ))}
                   </div>
+                  {availableWords.length === 0 && (
+                    <div className="text-center py-8 text-gray-500 italic">
+                      🎉 All words have been placed! Click "Check Answers" to
+                      see your score.
+                    </div>
+                  )}
                 </div>
 
                 {/* Check Answers Button */}
-                <div className="pt-2 sm:pt-4">
+                <div className="pt-4 text-center">
                   <Button
                     onClick={checkAnswers}
-                    className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base 
-                      bg-success-500 hover:bg-success-600 text-white shadow-md hover:shadow-lg 
-                      transition-all duration-200 font-medium"
+                    className="px-8 py-4 text-lg bg-gradient-to-r from-green-500 to-blue-500 
+                      hover:from-green-600 hover:to-blue-600 text-white shadow-lg hover:shadow-xl 
+                      transition-all duration-200 font-semibold rounded-xl"
                   >
-                    Check Answers
+                    ✅ Check Answers
                   </Button>
                 </div>
               </div>
@@ -423,4 +484,4 @@ const DragDropWordGame = () => {
   )
 }
 
-export default DragDropWordGame
+export default ClickWordGame

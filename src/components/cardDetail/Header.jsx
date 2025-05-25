@@ -58,7 +58,7 @@ const Header = ({
               handleEnterKeyPress={handleEnterKeyPress}
               isEditing={isEditing}
             >
-              <Button className="bg-gradient-to-r from-accent-600 to-primary-600 hover:from-accent-700 hover:to-primary-700 text-white shadow-sm text-xs sm:text-base py-1.5 px-3 sm:px-4">
+              <Button className="bg-primary-600 hover:bg-primary-700 text-white shadow-sm text-xs sm:text-base py-1.5 px-3 sm:px-4">
                 <Plus size={14} className="sm:size-4" />
                 <span className="hidden sm:inline">Tambah Kartu</span>
                 <span className="sm:hidden">Tambah</span>
